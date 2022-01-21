@@ -1,0 +1,2 @@
+// https://github.com/bgrins/bindWithDelay/blob/master/bindWithDelay.js
+!function(a){a.fn.bindWithDelay=function(b,c,d,e,f){return a.isFunction(c)&&(f=e,e=d,d=c,c=void 0),d.guid=d.guid||a.guid&&a.guid++,this.each(function(){function h(){var b=a.extend(!0,{},arguments[0]),c=this,h=function(){g=null,d.apply(c,[b])};f||(clearTimeout(g),g=null),g||(g=setTimeout(h,e))}var g=null;h.guid=d.guid,a(this).bind(b,c,h)})}}(jQuery);

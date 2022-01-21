@@ -1,0 +1,90 @@
+abbr {
+	text-decoration: none;
+}
+
+.container-fluid textarea {
+	height: 150px;
+	padding: 0 4px;
+	font-family: monospace;
+}
+
+#conv_utf8char {
+	font-family: sans-serif;
+}
+
+.copy,
+.hash,
+.hash_raw,
+.html,
+.send,
+.file {
+	margin-right: 1ex;
+}
+
+.hash_out,
+.example {
+	font-family: monospace;
+	font-size: larger;
+}
+
+.example {
+	font-size: 100%;
+}
+
+#ip {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	color: lightgray;
+	z-index: 2;
+	text-align: right;
+}
+
+#ip span {
+	font-family: monospace;
+	font-size: larger;
+	margin-left: 1ex;
+}
+
+.input-xs {
+	height: 22px;
+	font-size: 12px !important;
+	padding-left: 5px !important;
+	width: 50%;
+}
+
+.hidden {
+	display: none;
+}
+
+@media only all {
+	#divInput {
+		line-height: 30px;
+	}
+
+	#formula {
+		border-left: 2px solid #5441f1;
+		margin: 5px;
+		font-size: 14px;
+		padding: 5px 0 5px 10px;
+	}
+
+	#formula ul {
+		padding-left: 20px;
+		margin: 0;
+	}
+
+	#ruler {
+		border: 1px solid gray;
+	}
+}
+
+@media only screen and (max-width: 500px) {
+	#divInput {
+		line-height: normal;
+	}
+
+	#formula {
+		width: 100%
+	}
+}
