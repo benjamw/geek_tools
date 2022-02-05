@@ -7,7 +7,7 @@ namespace Morse;
  * @author Espen Hovlandsdal <espen@hovlandsdal.com>
  * @copyright Copyright (c) Espen Hovlandsdal
  * @license http://www.opensource.org/licenses/mit-license MIT License
- * @link https://github.com/rexxars/morse-php
+ * @link https://github.com/skillcoder/morse-php
  */
 class Table implements \ArrayAccess {
     /**
