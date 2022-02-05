@@ -107,8 +107,6 @@ EOHTML;
 
 	<div id="ip">
 		Your IP: <span><?= $_SERVER['REMOTE_ADDR']; ?></span><br>
-		Random Doc IPv4: <span><script>document.write(generateRandomIP(4));</script></span><br>
-		Random Doc IPv6: <span><script>document.write(generateRandomIP(6));</script></span><br>
 	</div>
 
 	<div class="row">
@@ -257,7 +255,7 @@ EOHTML;
 						<div class="form-group col-md">
 							<label for="conv_hex">Hexadecimal:</label>
 							<textarea id="conv_hex" class="form-control digits bytes"></textarea>
-							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as a raw string">Hash Bytes</button>
+							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as raw bytes">Hash Bytes</button>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -283,7 +281,7 @@ EOHTML;
 						<div class="form-group col-md">
 							<label for="conv_utf8bytes">Bytes: ( <span class="example">F0 9F 98 83 E2 88 9A CF 80 21</span> )</label>
 							<textarea id="conv_utf8bytes" class="form-control bytes"></textarea>
-							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as a raw string">Hash Bytes</button>
+							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as raw bytes">Hash Bytes</button>
 							<?= $buttons ?>
 						</div>
 						<div class="form-group col-md">
@@ -326,11 +324,11 @@ EOHTML;
 					<form>
 						<div class="form-group row">
 							<label for="rand_ipv4">IPv4</label>
-							<input id="rand_ipv4" class="form-control" type="text" disabled value="<script>document.write(generateRandomIP(4));</script>">
+							<input id="rand_ipv4" class="form-control" type="text" disabled>
 						</div>
 						<div class="form-group row">
-							<label for="rand_ipv6"></label>
-							<input id="rand_ipv6" class="form-control" type="text" disabled value="<script>document.write(generateRandomIP(6));</script>">
+							<label for="rand_ipv6">IPv6</label>
+							<input id="rand_ipv6" class="form-control" type="text" disabled>
 						</div>
 					</form>
 				</div>
