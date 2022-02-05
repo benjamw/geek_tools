@@ -202,16 +202,9 @@ function to_bytes($val) {
 }
 
 function from_bytes($val) {
-	$val = str_split(preg_replace('%\s+%im', '', strtoupper($val)), 2);
-	$ret = '';
+	$val = preg_replace('%\s+%im', '', strtoupper($val));
 
-	foreach ($val as $byte) {
-		if (preg_match('#^[0-9a-f]+$#i', $byte)) {
-			$ret .= chr(hexdec($byte));
-		}
-	}
-
-	return $ret;
+	return hex2bin($val);
 }
 
 // convert A-Z -> 1-26, all others to .
