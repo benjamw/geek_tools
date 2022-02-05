@@ -162,8 +162,12 @@ $("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
 				converted = BigInteger.parse(val, 8);
 				break;
 			case "dec" :
-				val = val.replace(/[^0-9]+/img, "");
+				val = val.replace(/[^0-9-]+/img, "");
 				converted = BigInteger.parse(val, 10);
+				// convert 2s compliment negative numbers to unsigned 256
+				if ((-128 <= converted) && (converted < 0)) {
+					converted = converted.add(256);
+				}
 				break;
 			case "hex" :
 				val = val.replace(/[^0-9a-f]+/img, "");
@@ -187,7 +191,7 @@ $("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
 		}
 	}
 	else {
-		let val_array = val.replace(/^\s+|\s+$/img, "").split(" ");
+		let val_array = val.replace(/^\s+|\s+$/img, "").replace(/[\s,.]+/img, " ").split(" ");
 
 		let outvar = {
 			"bin": [],
@@ -208,8 +212,12 @@ $("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
 					converted = BigInteger.parse(val, 8);
 					break;
 				case "dec" :
-					val = val.replace(/[^0-9]+/img, "");
+					val = val.replace(/[^0-9-]+/img, "");
 					converted = BigInteger.parse(val, 10);
+					// convert 2s compliment negative numbers to unsigned 256
+					if ((-128 <= converted) && (converted < 0)) {
+						converted = converted.add(256);
+					}
 					break;
 				case "hex" :
 					val = val.replace(/[^0-9a-f]+/img, "");
