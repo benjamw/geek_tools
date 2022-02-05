@@ -469,11 +469,14 @@ $("#caesar").on("change click", function (evt) {
 	$("#conv_rot13").val(str.caesar(amt));
 });
 
-$("button.hash").on("click", function (evt) {
+$("button.hash, button.hash_raw, button.hash_form").on("click", function (evt) {
 	let val = $(this).parents(".form-group").find("textarea").val();
 	let algoname;
 
 	$("#hash_value").val(val);
+	if ( ! $(evt.target).is('button.hash_form')) {
+		$("#hash_raw").prop('checked', $(evt.target).is('button.hash_raw'));
+	}
 
 	// do the ajax hashes
 	$.ajax(window.location.href, {
@@ -481,65 +484,7 @@ $("button.hash").on("click", function (evt) {
 		dataType: "json",
 		data: {
 			hashes: true,
-			hash: val
-		},
-		success: function (data) {
-			for (let algo in data) {
-				if (data.hasOwnProperty(algo)) {
-					algoname = slug(algo);
-					$("#hash_" + algoname).text(data[algo]);
-				}
-			}
-
-			window.location.hash = "";
-			window.location.hash = "#hashes";
-		}
-	});
-});
-
-$("button.hash_raw").on("click", function (evt) {
-	let val = $(this).parents(".form-group").find("textarea").val();
-	let algoname;
-
-	$("#hash_value").val(val);
-	$("#hash_raw").prop('checked', true);
-
-	// do the ajax hashes
-	$.ajax(window.location.href, {
-		method: "POST",
-		dataType: "json",
-		data: {
-			hashes: true,
-			hash_value: val,
-			hash_raw: true,
-		},
-		success: function (data) {
-			for (let algo in data) {
-				if (data.hasOwnProperty(algo)) {
-					algoname = slug(algo);
-					$("#hash_" + algoname).text(data[algo]);
-				}
-			}
-
-			window.location.hash = "";
-			window.location.hash = "#hashes";
-		}
-	});
-});
-
-$("button.hash_form").on("click", function (evt) {
-	let val = $(this).parents(".form-group").find("textarea").val();
-	let algoname;
-
-	$("#hash_value").val(val);
-
-	// do the ajax hashes
-	$.ajax(window.location.href, {
-		method: "POST",
-		dataType: "json",
-		data: {
-			hashes: true,
-			hash_value: val,
+			hash: val,
 			hash_raw: $('#hash_raw').is(':checked'),
 		},
 		success: function (data) {
@@ -597,3 +542,6 @@ $("button.file").on("click", function (evt) {
 	$('#file').val(val)
 		.parent().submit();
 });
+
+$("#rand_ipv4").val(generateRandomIP(4));
+$("#rand_ipv6").val(generateRandomIP(6));
