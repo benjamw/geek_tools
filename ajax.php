@@ -70,10 +70,8 @@ if ( ! empty($_POST['file'])) {
 	exit;
 }
 
-if ( ! function_exists('str_contains')) {
-	function str_contains(string $haystack, string $needle): bool {
-		return $needle !== '' && mb_strpos($haystack, $needle) !== false;
-	}
+function str_has(string $haystack, string $needle): bool {
+	return $needle !== '' && mb_strpos($haystack, $needle) !== false;
 }
 
 function do_hashes($skip_algos) {
@@ -251,7 +249,7 @@ function from_code($val) {
 }
 
 function base64_decode_both($data) {
-	if (str_contains($data, '-') || str_contains($data, '_')) {
+	if (str_has($data, '-') || str_has($data, '_')) {
 		$data = strtr($data, '-_', '+/');
 	}
 
