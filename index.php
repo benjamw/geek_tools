@@ -224,15 +224,24 @@ EOHTML;
 				</div>
 			</section>
 
-			<h2>Links</h2>
+			<h2>Random Things</h2>
 
-			<section id="links" class="card">
+			<section id="utf8" class="card">
 				<div class="card-body">
-					<ul class="list-unstyled">
-						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info">JWT Encode/Decode</a></li>
-						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info">JSON String Escape/Unescape</a></li>
-						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info">Latitude Longitude Format Converter</a></li>
-					</ul>
+					<form>
+						<div class="form-group row">
+							<label for="rand_ipv4">IPv4</label>
+							<input id="rand_ipv4" class="form-control" type="text" disabled>
+						</div>
+						<div class="form-group row">
+							<label for="rand_ipv6">IPv6</label>
+							<input id="rand_ipv6" class="form-control" type="text" disabled>
+						</div>
+						<div class="form-group row">
+							<label for="rand_uuid">UUID</label>
+							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
+						</div>
+					</form>
 				</div>
 			</section>
 
@@ -332,27 +341,19 @@ EOHTML;
 				</div>
 			</section>
 
-			<h2>Random Things</h2>
+			<h2>Links</h2>
 
-			<section id="utf8" class="card">
+			<section id="links" class="card">
 				<div class="card-body">
-					<form>
-						<div class="form-group row">
-							<label for="rand_ipv4">IPv4</label>
-							<input id="rand_ipv4" class="form-control" type="text" disabled>
-						</div>
-						<div class="form-group row">
-							<label for="rand_ipv6">IPv6</label>
-							<input id="rand_ipv6" class="form-control" type="text" disabled>
-						</div>
-						<div class="form-group row">
-							<label for="rand_uuid">UUID</label>
-							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
-						</div>
-					</form>
+					<ul class="list-unstyled">
+						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info">JWT Encode/Decode</a></li>
+						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info">JSON
+								String Escape/Unescape</a></li>
+						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info">Latitude Longitude
+								Format Converter</a></li>
+					</ul>
 				</div>
 			</section>
-
 
 		</div>
 
