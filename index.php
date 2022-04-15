@@ -12,7 +12,7 @@
 		// Convert to/from RFC 1924 (ASCII85)
 			// 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~
 			// this may be different from normal ASCII85 encoding
-			/*
+	/*
 	The conversion process is a simple one of division, taking the
 	remainders at each step, and dividing the quotient again, then
 	reading up the page, as is done for any other base conversion.
@@ -221,6 +221,19 @@ EOHTML;
 
 				</div>
 			</section>
+
+			<h2>Links</h2>
+
+			<section id="utf8" class="card">
+				<div class="card-body">
+					<ul>
+						<li><a href="https://jwt.io/" target="_blank">JWT Encode/Decode</a></li>
+						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank">JSON String Escape/Unescape</a></li>
+						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank">Latitude Longitude Format Converter</a></li>
+					</ul>
+				</div>
+			</section>
+
 		</div>
 
 		<div class="col-md">
@@ -329,6 +342,10 @@ EOHTML;
 						<div class="form-group row">
 							<label for="rand_ipv6">IPv6</label>
 							<input id="rand_ipv6" class="form-control" type="text" disabled>
+						</div>
+						<div class="form-group row">
+							<label for="rand_uuid">UUID</label>
+							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
 						</div>
 					</form>
 				</div>
