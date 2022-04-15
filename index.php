@@ -226,7 +226,7 @@ EOHTML;
 
 			<h2>Random Things</h2>
 
-			<section id="utf8" class="card">
+			<section id="random" class="card">
 				<div class="card-body">
 					<form>
 						<div class="form-group row">
