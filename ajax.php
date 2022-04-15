@@ -206,7 +206,7 @@ function to_bytes($val) {
 function from_bytes($val) {
 	$val = preg_replace('%\s+%im', '', strtoupper($val));
 
-	return hex2bin($val);
+	return ctype_xdigit(strlen($val) % 2 ? "" : $val) ? hex2bin($val) : "ERROR: invalid binary string";
 }
 
 // convert A-Z -> 1-26, all others to .
