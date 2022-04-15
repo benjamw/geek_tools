@@ -116,6 +116,7 @@ EOHTML;
 
 			<section id="converters" class="card">
 				<div class="card-body">
+
 					<div class="row">
 						<div class="form-group col-md">
 							<label for="conv_raw">Raw:</label>
@@ -125,15 +126,9 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 						<div class="form-group col-md">
-							<label for="conv_url"><abbr title="Uniform Resource Locator">URL</abbr> Encoded:</label>
-							<textarea id="conv_url" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md">
 							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )
-								<input type="checkbox" id="b64url"> <label for="b64url"><abbr title="Uniform Resource Locator">URL</abbr></label>:
+								<input type="checkbox" id="b64url">
+								<label for="b64url"><abbr title="Uniform Resource Locator">URL</abbr></label>:
 								( <span class="example">-</span> and <span class="example">_</span> )</label>
 							<textarea id="conv_base64" class="form-control"></textarea>
 							<form method="post" style="display:inline;">
@@ -142,12 +137,8 @@ EOHTML;
 							</form>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col-md">
-							<label for="conv_uuencode">UUEncode:</label>
-							<textarea id="conv_uuencode" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
 					</div>
+
 					<div class="row">
 						<div class="form-group col-md">
 							<label for="conv_base85">Base85 (<abbr title="American Standard Code for Information Interchange">ASCII</abbr>85):</label>
@@ -160,10 +151,24 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 					</div>
+
 					<div class="row">
 						<div class="form-group col-md">
 							<label for="conv_quoted">Quoted Printable:</label>
 							<textarea id="conv_quoted" class="form-control"></textarea>
+							<?= $buttons ?>
+						</div>
+						<div class="form-group col-md">
+							<label for="conv_url"><abbr title="Uniform Resource Locator">URL</abbr> Encoded:</label>
+							<textarea id="conv_url" class="form-control"></textarea>
+							<?= $buttons ?>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md">
+							<label for="conv_uuencode">UUEncode:</label>
+							<textarea id="conv_uuencode" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 						<div class="form-group col-md">
@@ -172,6 +177,7 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 					</div>
+
 					<!-- <div class="row">
 						<div class="form-group col-md">
 							<label for="conv_yenc">yEnc:</label>
@@ -184,6 +190,7 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 					</div> -->
+
 					<div class="row">
 						<div class="form-group col-md">
 							<label for="conv_rot13" class="form-inline">Rot&mdash;<input type="number" id="caesar" class="form-control input-xs" max="26" min="-26" step="1" value="13">
@@ -197,6 +204,7 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 					</div>
+
 					<div class="row">
 						<div class="form-group col-md">
 							<label for="conv_morse">Morse Code:</label>
