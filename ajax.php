@@ -70,6 +70,12 @@ if ( ! empty($_POST['file'])) {
 	exit;
 }
 
+if ( ! function_exists('str_contains')) {
+	function str_contains(string $haystack, string $needle): bool {
+		return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+	}
+}
+
 function do_hashes($skip_algos) {
 	$algos = hash_algos();
 
@@ -126,10 +132,7 @@ function do_encodings() {
 			$raw = $morse->fromMorse($val);
 			break;
 		case 'base64' :
-			$raw = base64_decode(preg_replace('|\s+|', '', $val));
-			break;
-		case 'base64url' :
-			$raw = base64url_decode(preg_replace('|\s+|', '', $val));
+			$raw = base64_decode_both(preg_replace('|\s+|', '', $val));
 			break;
 		case 'base85' :
 			$raw = $base85->decode($val);
@@ -177,7 +180,6 @@ function do_encodings() {
 		'rev' => mb_strrev($raw),
 		'morse' => $morse->toMorse($raw),
 		'base64' => base64_encode($raw),
-		'base64url' => base64url_encode($raw),
 		'base85' => $base85->encode($raw),
 		'z85' => $z85->encode($raw),
 		'uuencode' => convert_uuencode($raw),
@@ -248,12 +250,12 @@ function from_code($val) {
 	return $out;
 }
 
-function base64url_encode($data) {
-	return strtr(base64_encode($data), '+/', '-_');
-}
+function base64_decode_both($data) {
+	if (str_contains($data, '-') || str_contains($data, '_')) {
+		$data = strtr($data, '-_', '+/');
+	}
 
-function base64url_decode($data) {
-	return base64_decode(strtr($data, '-_', '+/'));
+	return base64_decode($data);
 }
 
 function slug($name) {

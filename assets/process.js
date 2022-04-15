@@ -89,6 +89,11 @@ function group(str, num, reverse) {
 	}
 }
 
+function check_base64() {
+	let b64_string = $("#conv_base64").val();
+	$("#b64url").prop("checked", (-1 !== b64_string.indexOf("-") || -1 !== b64_string.indexOf("_")));
+}
+
 $("#int_grouped").on("change click share:update", function (evt) {
 	$("#int_split").prop("checked", false);
 	$("#int_padded").prop("checked", false);
@@ -364,6 +369,10 @@ $("#converters").find("textarea").bindWithDelay("change keyup share:update", fun
 	let type = $(this).attr("id").split("_")[1];
 	let val = $(this).val();
 
+	if (type === "base64") {
+		check_base64();
+	}
+
 	// do the ajax conversions
 	$.ajax(window.location.href, {
 		method: "POST",
@@ -467,6 +476,26 @@ $("#caesar").on("change click", function (evt) {
 	let amt = $(this).val();
 
 	$("#conv_rot13").val(str.caesar(amt));
+});
+
+$("#b64url").on("change click", function (evt) {
+	evt.stopPropagation();
+
+	blocked = true;
+	setTimeout(function () {
+		blocked = false;
+	}, 500);
+
+	let str = $("#conv_base64").val();
+
+	if ($("#b64url").prop("checked")) {
+		str = str.replace("+", "-").replace("/", "_");
+	}
+	else {
+		str = str.replace("-", "+").replace("_", "/");
+	}
+
+	$("#conv_base64").val(str);
 });
 
 $("button.hash, button.hash_raw, button.hash_form").on("click", function (evt) {

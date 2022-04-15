@@ -70,6 +70,14 @@ abbr {
 	width: auto;
 }
 
+label[for="b64url"] {
+	margin-bottom: 0;
+}
+
+#b64url {
+	margin-left: 3em
+}
+
 @media only all {
 	#divInput {
 		line-height: 30px;

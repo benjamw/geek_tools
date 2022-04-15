@@ -125,26 +125,16 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 						<div class="form-group col-md">
-							<label for="conv_code">A &rarr; 1:</label>
-							<textarea id="conv_code" class="form-control"></textarea>
+							<label for="conv_url"><abbr title="Uniform Resource Locator">URL</abbr> Encoded:</label>
+							<textarea id="conv_url" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col-md">
-							<label for="conv_rot13" class="form-inline">Rot&mdash;<input type="number" id="caesar" class="form-control input-xs" max="26" min="-26" step="1" value="13"> (Caesar cipher):</label>
-							<textarea id="conv_rot13" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
-						<div class="form-group col-md">
-							<label for="conv_rev">Reverse:</label>
-							<textarea id="conv_rev" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md">
-							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )</label>
+							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )
+								<input type="checkbox" id="b64url"> <label for="b64url"><abbr title="Uniform Resource Locator">URL</abbr></label>:
+								( <span class="example">-</span> and <span class="example">_</span> )</label>
 							<textarea id="conv_base64" class="form-control"></textarea>
 							<form method="post" style="display:inline;">
 								<input type="hidden" name="file" id="file">
@@ -153,20 +143,8 @@ EOHTML;
 							<?= $buttons ?>
 						</div>
 						<div class="form-group col-md">
-							<label for="conv_base64url">Base64 <abbr title="Uniform Resource Locator">URL</abbr>: ( <span class="example">-</span> and <span class="example">_</span> )</label>
-							<textarea id="conv_base64url" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md">
-							<label for="conv_quoted">Quoted Printable:</label>
-							<textarea id="conv_quoted" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
-						<div class="form-group col-md">
-							<label for="conv_url"><abbr title="Uniform Resource Locator">URL</abbr> Encoded:</label>
-							<textarea id="conv_url" class="form-control"></textarea>
+							<label for="conv_uuencode">UUEncode:</label>
+							<textarea id="conv_uuencode" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -179,6 +157,18 @@ EOHTML;
 						<div class="form-group col-md">
 							<label for="conv_z85">Z85:</label>
 							<textarea id="conv_z85" class="form-control"></textarea>
+							<?= $buttons ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md">
+							<label for="conv_quoted">Quoted Printable:</label>
+							<textarea id="conv_quoted" class="form-control"></textarea>
+							<?= $buttons ?>
+						</div>
+						<div class="form-group col-md">
+							<label for="conv_puny">Punycode:</label>
+							<textarea id="conv_puny" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -196,26 +186,27 @@ EOHTML;
 					</div> -->
 					<div class="row">
 						<div class="form-group col-md">
+							<label for="conv_rot13" class="form-inline">Rot&mdash;<input type="number" id="caesar" class="form-control input-xs" max="26" min="-26" step="1" value="13">
+								(Caesar cipher):</label>
+							<textarea id="conv_rot13" class="form-control"></textarea>
+							<?= $buttons ?>
+						</div>
+						<div class="form-group col-md">
+							<label for="conv_rev">Reverse:</label>
+							<textarea id="conv_rev" class="form-control"></textarea>
+							<?= $buttons ?>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md">
 							<label for="conv_morse">Morse Code:</label>
 							<textarea id="conv_morse" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 						<div class="form-group col-md">
-							<label for="conv_uuencode">UUEncode:</label>
-							<textarea id="conv_uuencode" class="form-control"></textarea>
+							<label for="conv_code">A &rarr; 1:</label>
+							<textarea id="conv_code" class="form-control"></textarea>
 							<?= $buttons ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md">
-							<label for="conv_puny">Punycode:</label>
-							<textarea id="conv_puny" class="form-control"></textarea>
-							<?= $buttons ?>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md">
-							<!-- empty -->
 						</div>
 					</div>
 
@@ -239,8 +230,8 @@ EOHTML;
 		<div class="col-md">
 			<h2>Digits
 				<small>
-					<label title="Each space separated number is its own value"><input type="checkbox" id="int_split" checked="checked"/> Split</label>
-					<label title="Each space separated number is its own value, padded with leading zeros"><input type="checkbox" id="int_padded"/> Split Padded</label>
+					<label title="Each space separated number is its own value"><input type="checkbox" id="int_split"/> Split</label>
+					<label title="Each space separated number is its own value, padded with leading zeros"><input type="checkbox" id="int_padded" checked="checked"/> Split Padded</label>
 					<label title="A single number with space grouped digits"><input type="checkbox" id="int_grouped"/> Grouped</label>
 				</small>
 			</h2>
