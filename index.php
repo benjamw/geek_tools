@@ -128,8 +128,11 @@ EOHTML;
 						<div class="form-group col-md">
 							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )
 								<input type="checkbox" id="b64url">
-								<label for="b64url"><abbr title="Uniform Resource Locator">URL</abbr></label>:
-								( <span class="example">-</span> and <span class="example">_</span> )</label>
+								<label for="b64url">
+									<abbr title="Uniform Resource Locator">URL</abbr>:
+									( <span class="example">-</span> and <span class="example">_</span> )
+								</label>
+							</label>
 							<textarea id="conv_base64" class="form-control"></textarea>
 							<form method="post" style="display:inline;">
 								<input type="hidden" name="file" id="file">
