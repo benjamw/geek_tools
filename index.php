@@ -224,12 +224,12 @@ EOHTML;
 
 			<h2>Links</h2>
 
-			<section id="utf8" class="card">
+			<section id="links" class="card">
 				<div class="card-body">
-					<ul>
-						<li><a href="https://jwt.io/" target="_blank">JWT Encode/Decode</a></li>
-						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank">JSON String Escape/Unescape</a></li>
-						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank">Latitude Longitude Format Converter</a></li>
+					<ul class="list-unstyled">
+						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info">JWT Encode/Decode</a></li>
+						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info">JSON String Escape/Unescape</a></li>
+						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info">Latitude Longitude Format Converter</a></li>
 					</ul>
 				</div>
 			</section>

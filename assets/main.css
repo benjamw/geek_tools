@@ -57,6 +57,19 @@ abbr {
 	display: none;
 }
 
+#links ul {
+	margin-bottom: 0;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+#links ul li {
+	margin: 1ex;
+	flex-grow: 0;
+	width: auto;
+}
+
 @media only all {
 	#divInput {
 		line-height: 30px;
