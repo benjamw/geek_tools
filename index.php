@@ -2,7 +2,7 @@
 
 	// find out what caused the window[funcName] to fail saying that window[funcName] was not a function
 
-	// TODO: add JWT decoder/encoder
+	// `7B EA` does weird things when switching between UTF-8 bytes, and hexadecimal
 
 	// TODO: create IPv6 tools
 		// Expand/contract (zeros and :)
@@ -238,7 +238,7 @@ EOHTML;
 							<input id="rand_ipv6" class="form-control" type="text" disabled>
 						</div>
 						<div class="form-group row">
-							<label for="rand_uuid">UUID</label>
+							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr></label>
 							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
 						</div>
 					</form>
@@ -346,10 +346,11 @@ EOHTML;
 			<section id="links" class="card">
 				<div class="card-body">
 					<ul class="list-unstyled">
-						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info">JWT Encode/Decode</a></li>
-						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info">JSON String Escape/Unescape</a></li>
-						<li><a href="https://regex101.com/" target="_blank" class="btn btn-info">Regex 101</a></li>
-						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info">Latitude Longitude Format Converter</a></li>
+						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info" title="Encode and Decode JSON Web Tokens"><abbr title="JSON Web Token">JWT</abbr> Encode/Decode</a></li>
+						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info"><abbr title="JavaScript Object Notation">JSON</abbr> String Escape/Unescape</a></li>
+						<li><a href="https://regex101.com/" target="_blank" class="btn btn-info" title="Create and test regular expressions"><abbr title="Regular Expression">Regex</abbr> 101</a></li>
+						<li><a href="https://icyberchef.com/" target="_blank" class="btn btn-info" title="Highly customizable conversion tool">Cyber Chef</a></li>
+						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info" title="Convert Latitude and Longitude values between different formats">Latitude Longitude Format Converter</a></li>
 					</ul>
 				</div>
 			</section>
