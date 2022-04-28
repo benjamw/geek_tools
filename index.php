@@ -127,8 +127,8 @@ EOHTML;
 						</div>
 						<div class="form-group col-md">
 							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )
-								<input type="checkbox" id="b64url">
 								<label for="b64url">
+									<input type="checkbox" id="b64url">
 									<abbr title="Uniform Resource Locator">URL</abbr>:
 									( <span class="example">-</span> and <span class="example">_</span> )
 								</label>
