@@ -347,10 +347,9 @@ EOHTML;
 				<div class="card-body">
 					<ul class="list-unstyled">
 						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info">JWT Encode/Decode</a></li>
-						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info">JSON
-								String Escape/Unescape</a></li>
-						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info">Latitude Longitude
-								Format Converter</a></li>
+						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info">JSON String Escape/Unescape</a></li>
+						<li><a href="https://regex101.com/" target="_blank" class="btn btn-info">Regex 101</a></li>
+						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info">Latitude Longitude Format Converter</a></li>
 					</ul>
 				</div>
 			</section>
