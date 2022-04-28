@@ -1,6 +1,11 @@
 let bindDelay = 500; // ms
 let blocked = false;
 
+const BIN_REGEX = /[^01]+/img;
+const OCT_REGEX = /[^0-7]+/img;
+const DEC_REGEX = /[^0-9-]+/img;
+const HEX_REGEX = /[^0-9a-f]+/img;
+
 if (!String.prototype.modPad) {
 	String.prototype.modPad = function (num, char) {
 		let ret = this;
@@ -159,15 +164,15 @@ $("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
 
 		switch (type) {
 			case "bin" :
-				val = val.replace(/[^01]+/img, "");
+				val = val.replace(BIN_REGEX, "");
 				converted = BigInteger.parse(val, 2);
 				break;
 			case "oct" :
-				val = val.replace(/[^0-7]+/img, "");
+				val = val.replace(OCT_REGEX, "");
 				converted = BigInteger.parse(val, 8);
 				break;
 			case "dec" :
-				val = val.replace(/[^0-9-]+/img, "");
+				val = val.replace(DEC_REGEX, "");
 				converted = BigInteger.parse(val, 10);
 				// convert 2s compliment negative numbers to unsigned 256
 				if ((-128 <= converted) && (converted < 0)) {
@@ -175,7 +180,7 @@ $("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
 				}
 				break;
 			case "hex" :
-				val = val.replace(/[^0-9a-f]+/img, "");
+				val = val.replace(HEX_REGEX, "");
 				converted = BigInteger.parse(val, 16);
 				break;
 			default :
@@ -196,7 +201,23 @@ $("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
 		}
 	}
 	else {
-		let val_array = val.replace(/^\s+|\s+$/img, "").replace(/[\s,.]+/img, " ").split(" ");
+		let regex = null;
+		switch (type) {
+			case "bin" :
+				regex = BIN_REGEX;
+				break;
+			case "oct" :
+				regex = OCT_REGEX;
+				break;
+			case "dec" :
+				regex = DEC_REGEX;
+				break;
+			case "hex" :
+				regex = HEX_REGEX;
+				break;
+		}
+
+		let val_array = val.replace(/^\s+|\s+$/img, "").replace(regex, " ").replace(/\s+/img, " ").split(" ");
 
 		let outvar = {
 			"bin": [],
