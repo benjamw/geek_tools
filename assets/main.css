@@ -74,7 +74,8 @@ label[for="b64url"] {
 	margin-bottom: 0;
 }
 
-#b64url {
+#b64url,
+label[for="hash_raw"] {
 	margin-left: 3em
 }
 
