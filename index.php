@@ -386,7 +386,7 @@ EOHTML;
 		<div class="col-md table-responsive">
 			<h2>Hashes</h2>
 			<div class="form-group">
-				<form method="get" action="<?= $_SERVER['SCRIPT_NAME'] ?>#hashes">
+				<form method="post" action="<?= $_SERVER['SCRIPT_NAME'] ?>#hashes">
 				<label for="hash_value">Input String:</label> <label for="hash_raw"><input type="checkbox" name="hash_raw" id="hash_raw" <?= ($_REQUEST['hash_raw'] ?? false) ? 'checked="checked"' : '' ?>> Hash Raw Bytes</label>
 				<textarea id="hash_value" name="hash_value" class="form-control"><?= $_REQUEST['hash_value'] ?? '' ?></textarea>
 				<button type="button" class="btn btn-sm btn-success hash_form">Submit</button>

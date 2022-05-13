@@ -534,7 +534,7 @@ $("button.hash, button.hash_raw, button.hash_form").on("click", function (evt) {
 		dataType: "json",
 		data: {
 			hashes: true,
-			hash: val,
+			hash_value: val,
 			hash_raw: $('#hash_raw').is(':checked'),
 		},
 		success: function (data) {
