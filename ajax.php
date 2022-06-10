@@ -165,7 +165,12 @@ function do_encodings() {
 	}
 
 	try {
-		$punyenc = $puny->encode($raw);
+		if ('' !== $raw) {
+			$punyenc = $puny->encode($raw);
+		}
+		else {
+			$punyenc = '';
+		}
 	}
 	catch (OutOfBoundsException $e) {
 		$punyenc = 'ERROR: ' . $e->getMessage();
@@ -205,6 +210,10 @@ function to_bytes($val) {
 
 function from_bytes($val) {
 	$val = preg_replace('%\s+%im', '', strtoupper($val));
+
+	if ('' === $val) {
+		return '';
+	}
 
 	return ctype_xdigit(strlen($val) % 2 ? "" : $val) ? hex2bin($val) : "ERROR: invalid binary string";
 }
