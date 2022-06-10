@@ -7,7 +7,7 @@ namespace Morse;
  * @author Espen Hovlandsdal <espen@hovlandsdal.com>
  * @copyright Copyright (c) Espen Hovlandsdal
  * @license http://www.opensource.org/licenses/mit-license MIT License
- * @link https://github.com/skillcoder/morse-php
+ * @link https://github.com/benjamw/morse-php
  */
 class Table implements \ArrayAccess {
     /**
@@ -70,7 +70,7 @@ class Table implements \ArrayAccess {
 
         // https://en.wikipedia.org/wiki/Morse_code_mnemonics
         // From: A contemporary Morse code chart: https://en.wikipedia.org/wiki/Morse_code_mnemonics#/media/File:Morse_Crib_Sheet.png
-        // * - mark non standart symbol
+        // * - mark non-standard symbol
         '.' => '010101', // Full stop
         ',' => '110011', // Comma
         '?' => '001100', // Interrogation mark
@@ -78,14 +78,14 @@ class Table implements \ArrayAccess {
         '!' => '101011', // 
         '/' => '10010',  // Fraction Bar (Division Sign)
         '(' => '10110',  // 
-        ')' => '101101', // Brackets [()] (transmited before and after the word or words affected)
+        ')' => '101101', // Brackets [()] (transmitted before and after the word or words affected)
         '&' => '01000',  // Interval (Wait)
         ':' => '111000', // Colon
         ';' => '101010', // 
         '=' => '10001',  // Break || Double dash (=)
         '+' => '01010',  // * End of message
         '-' => '100001', // Hyphen || Dash
-        '_' => '001101', // Underline (transmited before and after the word or words affected)
+        '_' => '001101', // Underline (transmitted before and after the word or words affected)
         '"' => '010010', // Quotation mark
         '$' => '0001001',
         '@' => '011010',

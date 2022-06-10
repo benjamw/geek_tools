@@ -7,7 +7,7 @@ namespace Morse;
  * @author Espen Hovlandsdal <espen@hovlandsdal.com>
  * @copyright Copyright (c) Espen Hovlandsdal
  * @license http://www.opensource.org/licenses/mit-license MIT License
- * @link https://github.com/skillcoder/morse-php
+ * @link https://github.com/benjamw/morse-php
  */
 class Text {
     /**
@@ -31,8 +31,8 @@ class Text {
      */
     protected $wordSeparator = '  ';
 
-    protected $lowerCaseModificator = '&';
-    protected $upperCaseModificator = '+';
+    protected $lowerCaseModifier = '&';
+    protected $upperCaseModifier = '+';
 
     private $is_case_sense = false;
 
@@ -42,7 +42,7 @@ class Text {
      * @param array $table Optional morse code table to use
      */
     public function __construct($table = null) {
-        $this->table = $table ? $table : new Table();
+        $this->table = $table ?: new Table();
     }
 
     public function setCaseSense($is_case_sense) {
@@ -83,6 +83,10 @@ class Text {
      * @return string
      */
     public function toMorse($text) {
+        if ('' === $text) {
+            return '';
+        }
+
         if (!$this->is_case_sense) {
             $text = strtoupper($text);
         }
@@ -106,7 +110,7 @@ class Text {
     }
 
     /**
-     * Translate lowercase with modifers to upper
+     * Translate lowercase with modifiers to upper
      *
      * @param array $characters
      * @return array
@@ -117,7 +121,7 @@ class Text {
         $i = 0;
         while($i < $cnt) {
             $char = $characters[$i];
-            if ($char === $this->upperCaseModificator) {
+            if ($char === $this->upperCaseModifier) {
                 $i++;
                 $result[] = mb_strtoupper($characters[$i]);
             } else {
@@ -130,7 +134,7 @@ class Text {
     }
 
     /**
-     * Translate uppercase with modifers to lower
+     * Translate uppercase with modifiers to lower
      *
      * @param array $characters
      * @return array
@@ -141,7 +145,7 @@ class Text {
         $i = 0;
         while($i < $cnt) {
             $char = $characters[$i];
-            if ($char === $this->lowerCaseModificator) {
+            if ($char === $this->lowerCaseModifier) {
                 $i++;
                 $result[] = mb_strtolower($characters[$i]);
             } else {
@@ -194,17 +198,17 @@ class Text {
         return implode(' ', $morse);
     }
 
-    private function getMorseCaseModiferCharacter($char, $is_lower, $is_letter) {
+    private function getMorseCaseModifierCharacter($char, $is_lower, $is_letter) {
         if (!$is_letter || ($this->upperMod && $is_lower) || (!$this->upperMod && !$is_lower)) {
             return $this->table->getMorse($char);
         }
 
-        $modifer = $this->lowerCaseModificator;
+        $modifier = $this->lowerCaseModifier;
         if ($this->upperMod) {
-            $modifer = $this->upperCaseModificator;
+            $modifier = $this->upperCaseModifier;
         }
 
-        return $this->table->getMorse($modifer).' '.$this->table->getMorse($char);
+        return $this->table->getMorse($modifier).' '.$this->table->getMorse($char);
     }
 
     /**
@@ -229,7 +233,7 @@ class Text {
                 return $this->invalidCharacterReplacement;
             }
 
-            return $this->getMorseCaseModiferCharacter($char, $is_lower, $is_letter);
+            return $this->getMorseCaseModifierCharacter($char, $is_lower, $is_letter);
         } else {
             if (!isset($this->table[$char])) {
                 return $this->invalidCharacterReplacement;
