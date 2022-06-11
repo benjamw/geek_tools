@@ -231,7 +231,7 @@ function to_code($val) {
 		elseif (is_numeric($char) && $char > 0) {
 			$out[] = chr($char + 64);
 		}
-		else {
+		elseif ('' !== $char) {
 			$out[] = '.';
 		}
 	}
