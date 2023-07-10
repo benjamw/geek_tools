@@ -230,15 +230,16 @@ EOHTML;
 				<div class="card-body">
 					<form>
 						<div class="form-group row">
-							<label for="rand_ipv4">IPv4</label>
+							<label for="rand_ipv4">IPv4 (for documentation examples)</label>
 							<input id="rand_ipv4" class="form-control" type="text" disabled>
 						</div>
 						<div class="form-group row">
-							<label for="rand_ipv6">IPv6</label>
+							<label for="rand_ipv6">IPv6 (for documentation examples)</label>
 							<input id="rand_ipv6" class="form-control" type="text" disabled>
 						</div>
 						<div class="form-group row">
-							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr></label>
+							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr> (<abbr title="Generated with PHP random_bytes function">cryptographically secure</abbr>)</label>
+
 							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
 						</div>
 					</form>
@@ -350,6 +351,8 @@ EOHTML;
 						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info"><abbr title="JavaScript Object Notation">JSON</abbr> String Escape/Unescape</a></li>
 						<li><a href="https://regex101.com/" target="_blank" class="btn btn-info" title="Create and test regular expressions"><abbr title="Regular Expression">Regex</abbr> 101</a></li>
 						<li><a href="https://icyberchef.com/" target="_blank" class="btn btn-info" title="Highly customizable conversion tool">Cyber Chef</a></li>
+						<li><a href="https://cryptii.com/">cryptii</a></li>
+						<li><a href="https://ijmacd.github.io/rfc3339-iso8601/">RFC 3339 and ISO 8601 Date formats</a></li>
 						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info" title="Convert Latitude and Longitude values between different formats">Latitude Longitude Format Converter</a></li>
 					</ul>
 				</div>
