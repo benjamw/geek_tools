@@ -351,8 +351,8 @@ EOHTML;
 						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info"><abbr title="JavaScript Object Notation">JSON</abbr> String Escape/Unescape</a></li>
 						<li><a href="https://regex101.com/" target="_blank" class="btn btn-info" title="Create and test regular expressions"><abbr title="Regular Expression">Regex</abbr> 101</a></li>
 						<li><a href="https://icyberchef.com/" target="_blank" class="btn btn-info" title="Highly customizable conversion tool">Cyber Chef</a></li>
-						<li><a href="https://cryptii.com/">cryptii</a></li>
-						<li><a href="https://ijmacd.github.io/rfc3339-iso8601/">RFC 3339 and ISO 8601 Date formats</a></li>
+						<li><a href="https://cryptii.com/" target="_blank" class="btn btn-info" title="Modular conversion, encoding, and encryption online">cryptii</a></li>
+						<li><a href="https://ijmacd.github.io/rfc3339-iso8601/" target="_blank" class="btn btn-info" title="RFC 3339 vs ISO 8601 vs HTML">Date formats</a></li>
 						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info" title="Convert Latitude and Longitude values between different formats">Latitude Longitude Format Converter</a></li>
 					</ul>
 				</div>
