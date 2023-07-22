@@ -1,8 +1,8 @@
 <?php
 
-	// FIXME: find out what caused the window[funcName] to fail saying that window[funcName] was not a function
+	// find out what caused the window[funcName] to fail saying that window[funcName] was not a function
 
-	// TODO: convert the lat_long.php file to JS and insert directly into this page
+	// `7B EA` does weird things when switching between UTF-8 bytes, and hexadecimal
 
 	// TODO: create IPv6 tools
 		// Expand/contract (zeros and :)
@@ -21,14 +21,14 @@
 
 		1080:0:0:0:8:800:200C:417A
 
-	In decimal, considered as a 128-bit number, that is
+	In decimal, considered as a 128 bit number, that is
 	21932261930451111902915077091070067066.
 
 	As we divide that successively by 85 the following remainders emerge:
 	51, 34, 65, 57, 58, 0, 75, 53, 37, 4, 19, 61, 31, 63, 12, 66, 46, 70,
 	68, 4.
 
-	Thus, in base85 the address is:
+	Thus in base85 the address is:
 
 		4-68-70-46-66-12-63-31-61-19-4-37-53-75-0-58-57-65-34-51.
 
@@ -52,26 +52,21 @@
 	// TODO: add a checkbox to add any demarcation characters for the encoded strings (UUEncode, Z85, etc)
 	// TODO: remove any of the above automatically if found
 
-/**
- * @var string $uuid
- * @var string[] $algos
- * @var string[] $hashes
- */
 require_once 'ajax.php';
 
-$buttons = <<< EOHTML
-	<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
-	<button type="button" class="hash btn btn-sm btn-success">Hash</button>
-	<span class="msg"></span>
-	<span class="float-end">
-		<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
-		<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
-	</span>
+	$buttons = <<< EOHTML
+		<button type="button" class="copy btn btn-sm btn-info">Copy</button>
+		<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+		<span class="msg"></span>
+		<span class="float-right">
+			<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+			<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+		</span>
 EOHTML;
 
 ?>
-<!doctype html><!-- PHP Version: <?= phpversion() ?> -->
-<html lang="en" data-bs-theme="dark">
+<!doctype html>
+<html lang="en">
 <head>
 
 	<meta charset="utf-8">
@@ -84,8 +79,8 @@ EOHTML;
 	<title>Geek Tools</title>
 
 	<!-- Bootstrap: Latest compiled and minified CSS -->
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.2/darkly/bootstrap.min.css" integrity="sha384-nNK9n28pDUDDgIiIqZ/MiyO3F4/9vsMtReZK39klb/MtkZI3/LtjSjlmyVPS3KdN" crossorigin="anonymous">
 
 	<link rel="stylesheet" href="assets/main.css">
 
@@ -108,28 +103,29 @@ EOHTML;
 <body>
 
 <div class="container-fluid">
+	<!-- PHP Version: <?= phpversion() ?> -->
 
 	<div id="ip">
 		Your IP: <span><?= $_SERVER['REMOTE_ADDR']; ?></span><br>
 	</div>
 
-	<div class="row row-cols-sm-1 row-cols-md-2">
+	<div class="row">
 
-		<div class="col">
+		<div class="col-md">
 			<h2>Converters</h2>
 
 			<section id="converters" class="card">
 				<div class="card-body">
 
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_raw">Raw:</label>
-							<textarea id="conv_raw" class="form-control" data-bs-theme="light"></textarea>
-							<textarea id="conv_bytes" class="form-control bytes hidden" data-bs-theme="light"></textarea>
+							<textarea id="conv_raw" class="form-control"></textarea>
+							<textarea id="conv_bytes" class="form-control bytes hidden"></textarea>
 							<button type="button" class="btn btn-sm btn-warning html" title="Open as HTML in new window">HTML</button>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )
 								<label for="b64url">
 									<input type="checkbox" id="b64url">
@@ -137,7 +133,7 @@ EOHTML;
 									( <span class="example">-</span> and <span class="example">_</span> )
 								</label>
 							</label>
-							<textarea id="conv_base64" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_base64" class="form-control"></textarea>
 							<form method="post" style="display:inline;">
 								<input type="hidden" name="file" id="file">
 								<button type="button" class="btn btn-sm btn-warning file" title="Download File">File</button>
@@ -147,80 +143,80 @@ EOHTML;
 					</div>
 
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_base85">Base85 (<abbr title="American Standard Code for Information Interchange">ASCII</abbr>85):</label>
-							<textarea id="conv_base85" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_base85" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_z85">Z85:</label>
-							<textarea id="conv_z85" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_z85" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_quoted">Quoted Printable:</label>
-							<textarea id="conv_quoted" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_quoted" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_url"><abbr title="Uniform Resource Locator">URL</abbr> Encoded:</label>
-							<textarea id="conv_url" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_url" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_uuencode">UUEncode:</label>
-							<textarea id="conv_uuencode" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_uuencode" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_puny">Punycode:</label>
-							<textarea id="conv_puny" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_puny" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 
 					<!-- <div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_yenc">yEnc:</label>
-							<textarea id="conv_yenc" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_yenc" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_xxencode">XXEncode: (not yet functional)</label>
-							<textarea id="conv_xxencode" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_xxencode" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div> -->
 
 					<div class="row">
-						<div class="form-group col">
-							<label for="conv_rot13">Rot-<input type="number" id="caesar" class="form-control input-xs" max="26" min="-26" step="1" value="13">
+						<div class="form-group col-md">
+							<label for="conv_rot13" class="form-inline">Rot&mdash;<input type="number" id="caesar" class="form-control input-xs" max="26" min="-26" step="1" value="13">
 								(Caesar cipher):</label>
-							<textarea id="conv_rot13" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_rot13" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_rev">Reverse:</label>
-							<textarea id="conv_rev" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_rev" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_morse">Morse Code:</label>
-							<textarea id="conv_morse" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_morse" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_code">A &rarr; 1:</label>
-							<textarea id="conv_code" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_code" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -234,16 +230,15 @@ EOHTML;
 				<div class="card-body">
 					<form>
 						<div class="form-group row">
-							<label for="rand_ipv4">IPv4 (for documentation examples)</label>
+							<label for="rand_ipv4">IPv4</label>
 							<input id="rand_ipv4" class="form-control" type="text" disabled>
 						</div>
 						<div class="form-group row">
-							<label for="rand_ipv6">IPv6 (for documentation examples)</label>
+							<label for="rand_ipv6">IPv6</label>
 							<input id="rand_ipv6" class="form-control" type="text" disabled>
 						</div>
 						<div class="form-group row">
-							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr> (<abbr title="Generated with PHP random_bytes function">cryptographically secure</abbr>)</label>
-
+							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr></label>
 							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
 						</div>
 					</form>
@@ -252,7 +247,7 @@ EOHTML;
 
 		</div>
 
-		<div class="col">
+		<div class="col-md">
 			<h2>Digits
 				<small>
 					<label title="Each space separated number is its own value"><input type="checkbox" id="int_split"/> Split</label>
@@ -264,26 +259,26 @@ EOHTML;
 			<section id="digits" class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_bin">Binary:</label>
-							<textarea id="conv_bin" class="form-control digits" data-bs-theme="light"></textarea>
+							<textarea id="conv_bin" class="form-control digits"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_oct">Octal:</label>
-							<textarea id="conv_oct" class="form-control digits" data-bs-theme="light"></textarea>
+							<textarea id="conv_oct" class="form-control digits"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_dec">Decimal:</label>
-							<textarea id="conv_dec" class="form-control digits" data-bs-theme="light"></textarea>
+							<textarea id="conv_dec" class="form-control digits"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_hex">Hexadecimal:</label>
-							<textarea id="conv_hex" class="form-control digits bytes" data-bs-theme="light"></textarea>
+							<textarea id="conv_hex" class="form-control digits bytes"></textarea>
 							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as raw bytes">Hash Bytes</button>
 							<?= $buttons ?>
 						</div>
@@ -300,46 +295,46 @@ EOHTML;
 			<section id="utf8" class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8char"><abbr title="Unicode Transformation Format">UTF</abbr>-8: ( 😃√π! )</label>
-							<textarea id="conv_utf8char" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8char" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8bytes">Bytes: ( <span class="example">F0 9F 98 83 E2 88 9A CF 80 21</span> )</label>
-							<textarea id="conv_utf8bytes" class="form-control bytes" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8bytes" class="form-control bytes"></textarea>
 							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as raw bytes">Hash Bytes</button>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8cbytes"><abbr title="Escaped">Esc</abbr>.: ( <span class="example">\xf0\x9f\x98\x83\xe2\x88\x9a\xcf\x80\x21</span> )</label>
-							<textarea id="conv_utf8cbytes" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8cbytes" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8htmldec"><abbr title="HyperText Markup Language">HTML</abbr> Decimal <abbr title="Numerical Character Reference">NCR</abbr>: ( <span class="example">&amp;#128515;&amp;#8730;&amp;#960;&amp;#33;</span> )</label>
-							<textarea id="conv_utf8htmldec" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8htmldec" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8htmlhex"><abbr title="HyperText Markup Language">HTML</abbr> Hex <abbr title="Numerical Character Reference">NCR</abbr>: ( <span class="example">&amp;#x1F603;&amp;#x221A;&amp;#x3C0;&amp;#x21;</span> )</label>
-							<textarea id="conv_utf8htmlhex" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8htmlhex" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8esc">Escaped Unicode: ( <span class="example">\u1F603\u221A\u3C0\u21</span> )</label>
-							<textarea id="conv_utf8esc" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8esc" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="conv_utf8code">Code Point: ( <span class="example">U+1F603 U+221A U+3C0 U+21</span> )</label>
-							<textarea id="conv_utf8code" class="form-control" data-bs-theme="light"></textarea>
+							<textarea id="conv_utf8code" class="form-control"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -351,13 +346,11 @@ EOHTML;
 			<section id="links" class="card">
 				<div class="card-body">
 					<ul class="list-unstyled">
-						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info" title="Convert Latitude and Longitude values between different formats">Latitude Longitude Format Converter</a></li>
 						<li><a href="https://jwt.io/" target="_blank" class="btn btn-info" title="Encode and Decode JSON Web Tokens"><abbr title="JSON Web Token">JWT</abbr> Encode/Decode</a></li>
 						<li><a href="https://www.freeformatter.com/json-escape.html" target="_blank" class="btn btn-info"><abbr title="JavaScript Object Notation">JSON</abbr> String Escape/Unescape</a></li>
 						<li><a href="https://regex101.com/" target="_blank" class="btn btn-info" title="Create and test regular expressions"><abbr title="Regular Expression">Regex</abbr> 101</a></li>
 						<li><a href="https://icyberchef.com/" target="_blank" class="btn btn-info" title="Highly customizable conversion tool">Cyber Chef</a></li>
-						<li><a href="https://cryptii.com/" target="_blank" class="btn btn-info" title="Modular conversion, encoding, and encryption online">cryptii</a></li>
-						<li><a href="https://ijmacd.github.io/rfc3339-iso8601/" target="_blank" class="btn btn-info" title="RFC 3339 vs ISO 8601 vs HTML">Date formats</a></li>
+						<li><a href="https://iohelix.net/misc/lat_long.php" target="_blank" class="btn btn-info" title="Convert Latitude and Longitude values between different formats">Latitude Longitude Format Converter</a></li>
 					</ul>
 				</div>
 			</section>
@@ -365,20 +358,20 @@ EOHTML;
 		</div>
 
 <!--
-		<div class="col">
+		<div class="col-md">
 			<h2>Inverted Color</h2>
 
 			<section id="color" class="card">
 				<div class="card-body">
 					<div class="row">
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="color_dec">Decimal:</label>
-							<textarea id="color_dec" class="form-control color" data-bs-theme="light"></textarea>
+							<textarea id="color_dec" class="form-control color"></textarea>
 							<?= $buttons ?>
 						</div>
-						<div class="form-group col">
+						<div class="form-group col-md">
 							<label for="color_hex">Hexadecimal:</label>
-							<textarea id="color_hex" class="form-control color" data-bs-theme="light"></textarea>
+							<textarea id="color_hex" class="form-control color"></textarea>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -390,55 +383,51 @@ EOHTML;
 	</div>
 
 	<div class="row" id="hashes">
-		<div class="col table-responsive">
+		<div class="col-md table-responsive">
 			<h2>Hashes</h2>
-			<section class="card">
-				<div class="card-body">
-					<div class="form-group">
-						<form method="post" action="<?= $_SERVER['SCRIPT_NAME'] ?>#hashes">
-						<label for="hash_value">Input String:</label> <label for="hash_raw"><input type="checkbox" name="hash_raw" id="hash_raw" <?= ($_REQUEST['hash_raw'] ?? false) ? 'checked="checked"' : '' ?>> Hash Raw Bytes</label>
-						<textarea id="hash_value" name="hash_value" class="form-control" data-bs-theme="light"><?= $_REQUEST['hash_value'] ?? '' ?></textarea>
-						<button type="button" class="btn btn-sm btn-success hash_form">Submit</button>
-						<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
-						</form>
-					</div>
-					<table class="table table-sm">
-						<thead>
-							<tr style="border-bottom: 1px solid #999;">
-								<th>Algorithm</th>
-								<th>Hash</th>
-							</tr>
-						</thead>
-						<?php foreach ($algos as $algo) { ?>
-							<?php
-								$algoname = slug($algo);
-								$bad = ['md4', 'md5', 'sha1', 'ripemd128', 'crc32', 'haval128,3'];
-								$ok = ['sha256', 'sha512'];
-								$good = ['sha3-512'];
-								$class = '';
-								if (in_array($algo, $bad)) {
-									$class = ' class="table-danger"';
-								}
-								elseif (in_array($algo, $ok)) {
-									$class = ' class="table-warning"';
-								}
-								elseif (in_array($algo, $good)) {
-									$class = ' class="table-success"';
-								}
-							?>
-						<tr<?= $class ?>>
-							<th><?= $algo ?></th>
-							<td id="hash_<?= $algoname ?>" class="hash_out"><?= $hashes[$algo] ?></td>
-						</tr>
-						<?php } ?>
-					</table>
-				</div>
-			</section>
+			<div class="form-group">
+				<form method="post" action="<?= $_SERVER['SCRIPT_NAME'] ?>#hashes">
+				<label for="hash_value">Input String:</label> <label for="hash_raw"><input type="checkbox" name="hash_raw" id="hash_raw" <?= ($_REQUEST['hash_raw'] ?? false) ? 'checked="checked"' : '' ?>> Hash Raw Bytes</label>
+				<textarea id="hash_value" name="hash_value" class="form-control"><?= $_REQUEST['hash_value'] ?? '' ?></textarea>
+				<button type="button" class="btn btn-sm btn-success hash_form">Submit</button>
+				<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+				</form>
+			</div>
+			<table class="table table-striped table-hover table-condensed">
+				<thead>
+					<tr style="border-bottom: 1px solid #999;">
+						<th style="border-right: 1px solid #999">Algorithm</th>
+						<th>Hash</th>
+					</tr>
+				</thead>
+				<?php foreach ($algos as $algo) { ?>
+					<?php
+						$algoname = slug($algo);
+						$bad = ['md5', 'sha1', 'crc32', 'haval128,3', 'md4', 'ripemd128'];
+						$ok = ['sha256', 'sha512'];
+						$good = ['sha3-512'];
+						$class = '';
+						if (in_array($algo, $bad)) {
+							$class = ' class="text-danger danger"';
+						}
+						elseif (in_array($algo, $ok)) {
+							$class = ' class="text-warning warning"';
+						}
+						elseif (in_array($algo, $good)) {
+							$class = ' class="text-success success"';
+						}
+					?>
+				<tr<?= $class ?>>
+					<th style="border-right: 1px solid #999"><?= $algo ?></th>
+					<td id="hash_<?= $algoname ?>" class="hash_out"><?= $hashes[$algo] ?></td>
+				</tr>
+				<?php } ?>
+			</table>
 		</div>
 	</div>
 
 	<div class="row" id="ruler_box">
-		<div class="col">
+		<div class="col-md">
 			<h2>Length Conversion</h2>
 			<canvas id="ruler" width="1280" height="130">Your browser does not support the canvas element.</canvas>
 			<script>
@@ -452,14 +441,15 @@ EOHTML;
 				};
 			</script>
 			<form>
-				<div id="divInput" class="row">
-					<span class="col"><label for="mm">MM:</label><input id="mm" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="100" title="millimeter" class="form-control"></span>
-					<span class="col"><label for="cm">CM:</label><input id="cm" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="10" title="centimeter" class="form-control"></span>
-					<span class="col"><label for="inch">Decimal Inch:</label><input id="inch" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="3.94" title="decimal inch" class="form-control"></span>
-					<span class="col"><label for="finch">Fractional Inch:</label><input id="finch" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="3 15/16" title="fractional inch" class="form-control"></span>
+				<div id="divInput" class="form-row">
+					<span class="col"><label for="mm">MM:</label> <input id="mm" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="100" title="millimeter" class="form-control"></span>
+					<span class="col"> &nbsp; = &nbsp; <label for="cm">CM:</label> <input id="cm" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="10" title="centimeter" class="form-control"></span>
+					<span class="col" style="white-space:pre;"> &nbsp;= &nbsp; <label for="inch">Decimal Inch:</label> <input id="inch" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="3.94" title="decimal inch" class="form-control"></span>
+					<span class="col" style="white-space:pre;"> &nbsp;= &nbsp; <label for="finch">Fractional Inch:</label> <input id="finch" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="3 15/16" title="fractional inch" class="form-control"></span>
 				</div>
-				<div class="row">
-					<div class="col-3">
+				<br>
+				<div class="form-row">
+					<div class="col-auto">
 						<label for="fractions">Graduations:</label>
 						<select id="fractions" onchange="r.draw();" class="form-control">
 							<option value="8">1/8"</option>
