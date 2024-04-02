@@ -1,6 +1,6 @@
 <?php
 
-const APACHE_MIME_TYPES_URL = 'http://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types';
+const APACHE_MIME_TYPES_URL = 'https://svn.apache.org/repos/asf/httpd/httpd/trunk/docs/conf/mime.types';
 
 require_once 'vendor/morse/library/Table.php';
 require_once 'vendor/morse/library/Text.php';
@@ -28,7 +28,7 @@ if ( ! empty($_POST['encodings'])) {
 		foreach ($encodings as $key => $value) {
 			json_encode($value);
 			if (json_last_error()) {
-				$encodings[ $key ] = '-- ' . json_last_error_msg() . " -- Adjusted data follows:\n" . mb_convert_encoding($value, 'UTF-8', 'UTF-8');;
+				$encodings[$key] = '-- ' . json_last_error_msg() . " -- Adjusted data follows:\n" . mb_convert_encoding($value, 'UTF-8', 'UTF-8');
 			}
 		}
 
@@ -53,7 +53,7 @@ if ( ! empty($_POST['file'])) {
 	$mimes = generateUpToDateMimeArray(APACHE_MIME_TYPES_URL);
 	$exts = array_flip($mimes);
 
-	header('Content-Disposition: attachment; filename="geek_file.' . $exts[ $type ] . '"');
+	header('Content-Disposition: attachment; filename="geek_file.' . $exts[$type] . '"');
 	header('Content-Type: ' . $type);
 	echo $content;
 	exit;
@@ -64,9 +64,8 @@ if ( ! empty($_POST['file'])) {
 // ========= FUNCTIONS ===================================
 
 
-
 if ( ! function_exists('str_contains')) {
-	function str_contains($haystack, $needle): bool {
+	function str_contains(string $haystack, string $needle): bool {
 		return $needle !== '' && mb_strpos($haystack, $needle) !== false;
 	}
 }
@@ -91,7 +90,7 @@ function do_hashes(array $skip_algos): array {
 			continue;
 		}
 
-		$hashes[ $algo ] = hash($algo, $value, false);
+		$hashes[$algo] = hash($algo, $value);
 	}
 
 	return $hashes;
@@ -192,7 +191,7 @@ function from_bytes($val) {
 		return '';
 	}
 
-	return ctype_xdigit(strlen($val) % 2 ? "" : $val) ? hex2bin($val) : "ERROR: invalid binary string";
+	return ctype_xdigit(strlen($val) % 2 ? '' : $val) ? hex2bin($val) : "ERROR: invalid binary string";
 }
 
 // convert A-Z -> 1-26, all others to .
@@ -243,14 +242,14 @@ function base64_decode_both($data) {
 }
 
 function slug($name) {
-	return preg_replace("/[\\/\+\*-]/im", "_", $name);
+	return preg_replace("/[\\/+*-]/im", "_", $name);
 }
 
 function generateUpToDateMimeArray($url): array {
 	$s = [];
 	foreach (@explode("\n", @file_get_contents($url)) as $x) {
 		if (isset($x[0]) && $x[0] !== '#'
-			&& preg_match_all('#([^\s]+)#', $x, $out)
+			&& preg_match_all('#(\S+)#', $x, $out)
 			&& isset($out[1])
 			&& ($c = count($out[1])) > 1
 		) {
@@ -306,7 +305,7 @@ function to_utf8($string) {
 			| \xF0[\x90-\xBF][\x80-\xBF]{2}      # planes 1-3
 			| [\xF1-\xF3][\x80-\xBF]{3}          # planes 4-15
 			| \xF4[\x80-\x8F][\x80-\xBF]{2}      # plane 16
-			)*$%xs', $string
+			)*$%x', $string
 		)
 	) {
 		return $string;

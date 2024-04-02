@@ -250,6 +250,79 @@ EOHTML;
 				</div>
 			</section>
 
+			<h2>Time Conversion</h2>
+
+			<section id="time" class="card">
+				<div class="card-body">
+					<form>
+						<div class="row">
+							<div class="col">Decimal Values</div>
+						</div>
+						<div class="form-group row align-items-center row-cols-auto g-2">
+							<div class="col-2">
+								<input id="time_dec_days" class="form-control" type="text" inputmode="decimal">
+							</div>
+							<div class="col-0">
+								<label for="time_dec_days" class="col-form-label">d</label>
+							</div>
+							<div class="col-2">
+								<input id="time_dec_hours" class="form-control" type="text" inputmode="decimal">
+							</div>
+							<div class="col-0">
+								<label for="time_dec_hours" class="col-form-label">h</label>
+							</div>
+							<div class="col-2">
+								<input id="time_dec_mins" class="form-control" type="text" inputmode="decimal">
+							</div>
+							<div class="col-0">
+								<label for="time_dec_mins" class="col-form-label">m</label>
+							</div>
+							<div class="col-2">
+								<input id="time_dec_secs" class="form-control" type="text" inputmode="decimal">
+							</div>
+							<div class="col-0">
+								<label for="time_dec_secs" class="col-form-label">s</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col"><abbr title="Day Hour Minute Second">DHMS</abbr> Values</div>
+						</div>
+						<div class="form-group row align-items-center row-cols-auto g-2">
+							<div class="col-2">
+								<input id="time_dhms_days" class="form-control" type="number" min="0" value="0" inputmode="numeric">
+							</div>
+							<div class="col-0">
+								<label for="time_dhms_days" class="col-form-label">d</label>
+							</div>
+							<div class="col-2">
+								<input id="time_dhms_hours" class="form-control" type="number" min="0" max="23" value="0" inputmode="numeric">
+							</div>
+							<div class="col-0">
+								<label for="time_dhms_hours" class="col-form-label">h</label>
+							</div>
+							<div class="col-2">
+								<input id="time_dhms_mins" class="form-control" type="number" min="0" max="59" value="0" inputmode="numeric">
+							</div>
+							<div class="col-0">
+								<label for="time_dhms_mins" class="col-form-label">m</label>
+							</div>
+							<div class="col-2">
+								<input id="time_dhms_secs" class="form-control" type="number" min="0" max="59" value="0" inputmode="numeric">
+							</div>
+							<div class="col-0">
+								<label for="time_dhms_secs" class="col-form-label">s</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col"><label for="time_generic">Generic Input</label></div>
+						</div>
+						<div class="form-group row align-items-center row-cols-auto g-2">
+							<input id="time_generic" class="form-control" type="text">
+						</div>
+					</form>
+				</div>
+			</section>
+
 		</div>
 
 		<div class="col">
