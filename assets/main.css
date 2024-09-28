@@ -1,5 +1,6 @@
-abbr {
+abbr[title] {
 	text-decoration: none;
+	border-bottom: 1px dotted;
 }
 
 .container-fluid textarea {
@@ -32,7 +33,7 @@ abbr {
 }
 
 .example {
-	font-size: 100%;
+	font-size: 90%;
 }
 
 #ip {
@@ -94,6 +95,25 @@ label[for="hash_raw"] {
 input#caesar {
 	display: inline-block;
 	width: auto;
+}
+
+input.mono {
+	font-family: monospace;
+}
+
+.btn-tiny {
+	--bs-btn-padding-y: 0rem;
+	--bs-btn-padding-x: .25rem;
+	--bs-btn-font-size: .75rem;
+	vertical-align: baseline;
+}
+
+#ip_conv label {
+	margin-top: 0.5rem;
+}
+
+#time .row:not(:first-child).form-group {
+	margin-top: 0;
 }
 
 #hashes table tbody tr th:first-child {

@@ -167,6 +167,8 @@ let Ruler = class {
 				this.omsg.innerHTML = this.omm.value + ' mm &nbsp; = &nbsp; ' + this.ocm.value + ' cm &nbsp; = &nbsp; ' + this.oinch.value + ' inch' + (this.oinch.value == "1" ? "" : "es") + sFinch;
 				sTmpf = '<li>' + this.omm.value + ' mm &divide; 10 = ' + this.ocm.value + ' cm</li>';
 				sTmpf += '<li>' + this.omm.value + ' mm &divide; 25.4 = ' + (this.omm.value / 25.4) + ' in</li>';
+				sTmpf += '<li>' + this.oinch.value + ' in &times; 25.4 = ' + (this.oinch.value * 25.4) + ' mm</li>';
+				sTmpf += '<li>' + this.ofinch.value + ' = ' + this.frac_to_dec(this.ofinch.value) + ' in</li>';
 				this.oformula.innerHTML = '<ul>' + sTmpf + '</ul>';
 				this.oformula.style.display = "block";
 			}

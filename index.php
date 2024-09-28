@@ -2,8 +2,6 @@
 
 	// FIXME: find out what caused the window[funcName] to fail saying that window[funcName] was not a function
 
-	// TODO: convert the lat_long.php file to JS and insert directly into this page
-
 	// TODO: create IPv6 tools
 		// Expand/contract (zeros and :)
 		// convert to/from decimal (with :)
@@ -227,99 +225,101 @@ EOHTML;
 
 				</div>
 			</section>
-
-			<h2>Random Things</h2>
-
-			<section id="random" class="card">
-				<div class="card-body">
-					<form>
-						<div class="form-group row">
-							<label for="rand_ipv4">IPv4 (for documentation examples)</label>
-							<input id="rand_ipv4" class="form-control" type="text" disabled>
-						</div>
-						<div class="form-group row">
-							<label for="rand_ipv6">IPv6 (for documentation examples)</label>
-							<input id="rand_ipv6" class="form-control" type="text" disabled>
-						</div>
-						<div class="form-group row">
-							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr> (<abbr title="Generated with PHP random_bytes function">cryptographically secure</abbr>)</label>
-
-							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
-						</div>
-					</form>
-				</div>
-			</section>
-
+<!--
 			<h2>Time Conversion</h2>
 
 			<section id="time" class="card">
 				<div class="card-body">
-					<form>
-						<div class="row">
-							<div class="col">Decimal Values</div>
+					<div class="row">
+						<div class="col">Decimal Values</div>
+					</div>
+					<div class="form-group row align-items-center row-cols-auto g-2">
+						<div class="col-2">
+							<input id="time_dec_days" class="form-control" type="text" inputmode="decimal" data-bs-theme="light">
 						</div>
-						<div class="form-group row align-items-center row-cols-auto g-2">
-							<div class="col-2">
-								<input id="time_dec_days" class="form-control" type="text" inputmode="decimal">
-							</div>
-							<div class="col-0">
-								<label for="time_dec_days" class="col-form-label">d</label>
-							</div>
-							<div class="col-2">
-								<input id="time_dec_hours" class="form-control" type="text" inputmode="decimal">
-							</div>
-							<div class="col-0">
-								<label for="time_dec_hours" class="col-form-label">h</label>
-							</div>
-							<div class="col-2">
-								<input id="time_dec_mins" class="form-control" type="text" inputmode="decimal">
-							</div>
-							<div class="col-0">
-								<label for="time_dec_mins" class="col-form-label">m</label>
-							</div>
-							<div class="col-2">
-								<input id="time_dec_secs" class="form-control" type="text" inputmode="decimal">
-							</div>
-							<div class="col-0">
-								<label for="time_dec_secs" class="col-form-label">s</label>
-							</div>
+						<div class="col-0">
+							<label for="time_dec_days" class="col-form-label">D</label> or
 						</div>
-						<div class="row">
-							<div class="col"><abbr title="Day Hour Minute Second">DHMS</abbr> Values</div>
+						<div class="col-2">
+							<input id="time_dec_hours" class="form-control" type="text" inputmode="decimal" data-bs-theme="light">
 						</div>
-						<div class="form-group row align-items-center row-cols-auto g-2">
-							<div class="col-2">
-								<input id="time_dhms_days" class="form-control" type="number" min="0" value="0" inputmode="numeric">
-							</div>
-							<div class="col-0">
-								<label for="time_dhms_days" class="col-form-label">d</label>
-							</div>
-							<div class="col-2">
-								<input id="time_dhms_hours" class="form-control" type="number" min="0" max="23" value="0" inputmode="numeric">
-							</div>
-							<div class="col-0">
-								<label for="time_dhms_hours" class="col-form-label">h</label>
-							</div>
-							<div class="col-2">
-								<input id="time_dhms_mins" class="form-control" type="number" min="0" max="59" value="0" inputmode="numeric">
-							</div>
-							<div class="col-0">
-								<label for="time_dhms_mins" class="col-form-label">m</label>
-							</div>
-							<div class="col-2">
-								<input id="time_dhms_secs" class="form-control" type="number" min="0" max="59" value="0" inputmode="numeric">
-							</div>
-							<div class="col-0">
-								<label for="time_dhms_secs" class="col-form-label">s</label>
-							</div>
+						<div class="col-0">
+							<label for="time_dec_hours" class="col-form-label">H</label> or
 						</div>
-						<div class="row">
-							<div class="col"><label for="time_generic">Generic Input</label></div>
+						<div class="col-2">
+							<input id="time_dec_mins" class="form-control" type="text" inputmode="decimal" data-bs-theme="light">
 						</div>
-						<div class="form-group row align-items-center row-cols-auto g-2">
-							<input id="time_generic" class="form-control" type="text">
+						<div class="col-0">
+							<label for="time_dec_mins" class="col-form-label">M</label> or
 						</div>
-					</form>
+						<div class="col-2">
+							<input id="time_dec_secs" class="form-control" type="text" inputmode="decimal" data-bs-theme="light">
+						</div>
+						<div class="col-0">
+							<label for="time_dec_secs" class="col-form-label">S</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col"><abbr title="Day Hour Minute Second">DHMS</abbr> Values</div>
+					</div>
+					<div class="form-group row align-items-center row-cols-auto g-2">
+						<div class="col-2">
+							<input id="time_dhms_days" class="form-control" type="number" min="0" value="0" inputmode="numeric" data-bs-theme="light">
+						</div>
+						<div class="col-0">
+							<label for="time_dhms_days" class="col-form-label">D</label>
+						</div>
+						<div class="col-2">
+							<input id="time_dhms_hours" class="form-control" type="number" min="0" max="23" value="0" inputmode="numeric" data-bs-theme="light">
+						</div>
+						<div class="col-0">
+							<label for="time_dhms_hours" class="col-form-label">H</label>
+						</div>
+						<div class="col-2">
+							<input id="time_dhms_mins" class="form-control" type="number" min="0" max="59" value="0" inputmode="numeric" data-bs-theme="light">
+						</div>
+						<div class="col-0">
+							<label for="time_dhms_mins" class="col-form-label">M</label>
+						</div>
+						<div class="col-2">
+							<input id="time_dhms_secs" class="form-control" type="number" min="0" max="59" value="0" inputmode="numeric" data-bs-theme="light">
+						</div>
+						<div class="col-0">
+							<label for="time_dhms_secs" class="col-form-label">S</label>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col"><label for="time_generic">Generic Input</label></div>
+					</div>
+					<div class="form-group row align-items-center row-cols-auto g-2">
+						<input id="time_generic" class="form-control" type="text" data-bs-theme="light">
+					</div>
+				</div>
+			</section>
+-->
+			<h2>Random Things</h2>
+
+			<section id="random" class="card">
+				<div class="card-body">
+					<div class="row">
+						<div class="form-group col">
+							<label for="rand_ipv4">IPv4 (for documentation examples)</label>
+							<input id="rand_ipv4" class="form-control" type="text" disabled>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col">
+							<label for="rand_ipv6">IPv6 (for documentation examples)</label>
+							<input id="rand_ipv6" class="form-control" type="text" disabled>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col">
+							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr>
+								(<abbr title="Generated with PHP random_bytes function">cryptographically secure</abbr>)</label>
+							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
+						</div>
+					</div>
 				</div>
 			</section>
 
@@ -363,10 +363,6 @@ EOHTML;
 					</div>
 				</div>
 			</section>
-
-
-<!-- =========== SPLIT HERE ==================== -->
-
 
 			<h2><abbr title="Unicode Transformation Format">UTF</abbr>-8</h2>
 
@@ -414,6 +410,39 @@ EOHTML;
 							<label for="conv_utf8code">Code Point: ( <span class="example">U+1F603 U+221A U+3C0 U+21</span> )</label>
 							<textarea id="conv_utf8code" class="form-control" data-bs-theme="light"></textarea>
 							<?= $buttons ?>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<h2><abbr title="Internet Protocol">IP</abbr> Conversions</h2>
+
+			<section id="ip_conv" class="card">
+				<div class="card-body">
+					<div class="row">
+						<div id="ipv4_wrap" class="form-group col col-4">
+							<h5>IPv4</h5>
+
+							<label for="ipv4_text" class="form-label">IP Address: ( <span class="example">192.168.1.1</span> )</label>
+							<input id="ipv4_text" type="text" class="form-control mono" data-bs-theme="light">
+
+							<label for="ipv4_dec" class="form-label">Decimal (long) ( <span class="example">3232235777</span> ):</label>
+							<input id="ipv4_dec" type="text" class="form-control mono" data-bs-theme="light">
+
+							<label for="ipv4_hex" class="form-label">Hexadecimal ( <span class="example">C0 A8 01 01</span> ):</label>
+							<input id="ipv4_hex" type="text" class="form-control mono" data-bs-theme="light">
+						</div>
+						<div id="ipv6_wrap" class="form-group col col-8">
+							<h5>IPv6</h5>
+
+							<label for="ipv6_text" class="form-label">IP Address: <button id="ipv6_text_toggle" class="clear btn btn-sm btn-tiny btn-secondary">Toggle Compression</button></label>
+							<input id="ipv6_text" type="text" class="form-control mono" data-bs-theme="light">
+
+							<label for="ipv6_dec" class="form-label">Decimal: <button id="ipv6_dec_toggle" class="clear btn btn-sm btn-tiny btn-secondary">Toggle Compression</button></label>
+							<input id="ipv6_dec" type="text" class="form-control mono" data-bs-theme="light">
+
+							<label for="ipv6_rfc1924" class="form-label"><abbr title="Request For Comments">RFC</abbr> 1924:</label>
+							<input id="ipv6_rfc1924" type="text" class="form-control mono" data-bs-theme="light">
 						</div>
 					</div>
 				</div>
@@ -533,11 +562,12 @@ EOHTML;
 				</div>
 				<div class="row">
 					<div class="col-3">
-						<label for="fractions">Graduations:</label>
+						<label for="fractions">Smallest Graduations:</label>
 						<select id="fractions" onchange="r.draw();" class="form-control">
 							<option value="8">1/8"</option>
 							<option value="16" selected="selected">1/16"</option>
 							<option value="32">1/32"</option>
+							<option value="64">1/64"</option>
 						</select>
 						<input type="checkbox" id="mark18" value="1" onchange="r.draw();" style="margin-left:1em;">
 						<label for="mark18">label 1/8" markings</label>
@@ -549,6 +579,8 @@ EOHTML;
 				<ul>
 					<li>100 mm ÷ 10 = 10 cm</li>
 					<li>100 mm ÷ 25.4 = 3.937007874015748 in</li>
+					<li>3.94 in &times; 25.4 = 100.076 mm</li>
+					<li>3 15/16 in = 3.9375 in</li>
 				</ul>
 			</div>
 		</div>

@@ -10,6 +10,7 @@ const ipv4_doc_addresses = {
 };
 const ipv6_doc_addresses = {
 	'2001:db8': 6,
+	'3fff': 7,
 };
 
 function rand(min, max) {

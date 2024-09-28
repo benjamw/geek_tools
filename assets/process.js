@@ -6,6 +6,8 @@ const OCT_REGEX = /[^0-7]+/img;
 const DEC_REGEX = /[^0-9-]+/img;
 const HEX_REGEX = /[^0-9a-f]+/img;
 
+const base85Chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~';
+
 if (!String.prototype.modPad) {
 	String.prototype.modPad = function (num, char) {
 		let ret = this;
@@ -97,6 +99,140 @@ function group(str, num, reverse) {
 function check_base64() {
 	let b64_string = $("#conv_base64").val();
 	$("#b64url").prop("checked", (-1 !== b64_string.indexOf("-") || -1 !== b64_string.indexOf("_")));
+}
+
+function expandIPv6(ip) {
+	const parts = ip.split(':');
+	const fullParts = [];
+
+	for (const part of parts) {
+		if (part === '') {
+			const missingParts = 8 - parts.length + 1;
+			for (let i = 0; i < missingParts; i++) {
+				fullParts.push('0000');
+			}
+		}
+		else {
+			fullParts.push(part.padStart(4, '0'));
+		}
+	}
+
+	return fullParts.join(':');
+}
+
+function compressIPv6(ip) {
+	ip = ip.toUpperCase().replace(/:0+/g, ':');
+
+	// Find the longest sequence of zeroes
+	let longestZeroSeq = 0;
+	let longestZeroStart = -1;
+	let currentZeroSeq = 0;
+	let currentZeroStart = -1;
+
+	for (let i = 0; i < 8; i++) {
+		let part = ip.split(':')[i];
+		if (part === '') {
+			if (currentZeroSeq === 0) {
+				currentZeroStart = i;
+			}
+			currentZeroSeq++;
+		}
+		else {
+			if (currentZeroSeq > longestZeroSeq) {
+				longestZeroSeq = currentZeroSeq;
+				longestZeroStart = currentZeroStart;
+			}
+			currentZeroSeq = 0;
+		}
+	}
+
+	// Replace the longest sequence with '::'
+	if (longestZeroSeq > 1) {
+		ip = ip.split(':').slice(0, longestZeroStart).join(':') +
+			'::' +
+			ip.split(':').slice(longestZeroStart + longestZeroSeq).join(':');
+	}
+
+	return ip;
+}
+
+function isValidIPv6Dec(val) {
+	if (val.includes(":")) {
+		let groups = val.split(":");
+		for (let i = 0, len = groups.length; i < len; i += 1) {
+			if ((parseInt(group[i], 10) < 0) || (0xFFFF < parseInt(group[i], 10))) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	val = BigInt(val.toString());
+
+	return ((0n <= val) && (val <= BigInt(340282366920938463463374607431768211456)));
+}
+
+function ipv6ToDecimal(ip) {
+	ip = expandIPv6(ip);
+
+	let decimalValue = 0n;
+	let hextets = ip.split(':');
+
+	for (let i = 0; i < hextets.length; i++) {
+		decimalValue = (decimalValue << 16n) + BigInt(parseInt(hextets[i], 16));
+	}
+
+	return decimalValue.toString();
+}
+
+function decimalToIPv6(decimal) {
+	let hexString = BigInt(decimal).toString(16).toUpperCase();
+	let paddedHexString = hexString.padStart(32, '0');
+	let groups = paddedHexString.match(/.{1,4}/g);
+
+	return groups.join(':');
+}
+
+function ipv6ToRfc1924(ipv6Address) {
+	return decimalToRfc1924(ipv6ToDecimal(expandIPv6(ipv6Address)));
+}
+
+function decimalToRfc1924(decimal) {
+	decimal = BigInt(decimal.toString());
+
+	let base85String = '';
+	while (decimal > 0n) {
+		const remainder = decimal % 85n;
+		base85String = base85Chars[remainder] + base85String;
+		decimal = decimal / 85n;
+	}
+
+	return `IPv6:${base85String}`;
+}
+
+function rfc1924ToDecimal(val) {
+	let decimal = 0n;
+	while (val.length) {
+		const char = val.substring(0, 1);
+		const ord = base85Chars.indexOf(char);
+
+		decimal = (decimal * 85n) + BigInt(ord.toString());
+
+		val = val.substring(1);
+	}
+
+	return decimal.toString();
+}
+
+function ipv6ExpandedDecimalToDecimal(expandedDecimal) {
+	return ipv6ToDecimal(
+		expandedDecimal.split(":")
+			.map(x => x
+				.toString(16)
+				.toUpperCase())
+			.join(":")
+	);
 }
 
 $("#int_grouped").on("change click share:update", function (evt) {
@@ -517,6 +653,273 @@ $("#b64url").on("change click", function (evt) {
 	}
 
 	$("#conv_base64").val(str);
+});
+
+$("#ipv4_wrap").find("input").bindWithDelay("change keyup share:update", function (evt) {
+	// if there was a modifier pressed (Alt, Ctrl, etc), don't do anything
+	// the change event will capture any changes like cuts or pastes
+	if (evt.altKey || evt.ctrlKey || evt.metaKey) {
+		evt.preventDefault();
+		evt.stopPropagation();
+		return false;
+	}
+
+	if (("change" === evt.type) && blocked) {
+		return;
+	}
+
+	let type = $(this).attr("id").split("_")[1];
+	let val = $(this).val();
+
+	if ("" === val) {
+		// fill the inputs with the empty string
+		$("#ipv4_text").not(":focus").val("");
+		$("#ipv4_dec").not(":focus").val("");
+		$("#ipv4_hex").not(":focus").val("");
+
+		// pass the emptiness along to the other areas
+		if ("share:update" !== evt.type) {
+			$("#int_padded").prop("checked", true).trigger("share:update");
+			$("#conv_hex").not(":focus").val("").trigger("share:update");
+			$("#conv_bytes").not(":focus").val("").trigger("share:update");
+		}
+
+		return;
+	}
+
+	let ret = [];
+
+	switch (type) {
+		case "text" :
+			// ensure val is a valid IP address
+			let ip_reg = /^((25[0-5]|(2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$/
+			if ( ! ip_reg.test(val)) {
+				ret[0] = val;
+				ret[1] = "---";
+				ret[2] = "---";
+				break;
+			}
+
+			ret[0] = val;
+			ret[1] = val.split(".").reduce(function (ipInt, octet) {
+					return (ipInt << 8) + parseInt(octet, 10)
+				}, 0) >>> 0;
+			ret[2] = val.split(".").map(function (octet) {
+					return parseInt(octet, 10)
+						.toString(16)
+						.toUpperCase()
+						.padStart(2, "0")
+				}).join(" ");
+			break;
+		case "dec" :
+			// make sure the value is between 0 and 4294967295
+			if ((val < 0) || (4294967295 < val)) {
+				ret[0] = "---";
+				ret[1] = val;
+				ret[2] = "---";
+				break;
+			}
+
+			ret[0] = ((val >>> 24) + '.' + (val >> 16 & 255) + '.' + (val >> 8 & 255) + '.' + (val & 255))
+			ret[1] = val;
+			ret[2] = ret[0].split(".").map(function (octet) {
+					return parseInt(octet, 10)
+						.toString(16)
+						.toUpperCase()
+						.padStart(2, "0")
+				}).join(" ");
+			break;
+		case "hex" :
+			// make sure there are only 4 bytes
+			let hex_reg = /^(?:([0-9a-f]{2})\s*){4}$/
+			if ( ! hex_reg.test(val)) {
+				ret[0] = "---";
+				ret[1] = "---";
+				ret[2] = val;
+				break;
+			}
+
+			let hexets = [...val.matchAll(hex_reg)];
+			ret[0] = hexets.map(function (hex) {
+					return parseInt(hex, 16);
+				}).join(".")
+			ret[1] = hexets.reduce(function (ipInt, hex) {
+					return (ipInt << 8) + parseInt(hex, 16)
+				}, 0) >>> 0;
+			ret[2] = val;
+			break;
+	}
+
+	// fill the inputs with the returned values
+	$("#ipv4_text").not(":focus").val(ret[0]);
+	$("#ipv4_dec").not(":focus").val(ret[1]);
+	$("#ipv4_hex").not(":focus").val(ret[2]);
+
+	// pass the bytes along to the other areas
+	if ("share:update" !== evt.type) {
+		$("#int_padded").prop("checked", true).trigger("share:update");
+		$("#conv_hex").not(":focus").val(ret[2]).trigger("share:update");
+		$("#conv_bytes").not(":focus").val(ret[2]).trigger("share:update");
+	}
+
+}, bindDelay);
+
+
+$("#ipv6_wrap").find("input").bindWithDelay("change keyup share:update", function (evt) {
+	// if there was a modifier pressed (Alt, Ctrl, etc), don't do anything
+	// the change event will capture any changes like cuts or pastes
+	if (evt.altKey || evt.ctrlKey || evt.metaKey) {
+		evt.preventDefault();
+		evt.stopPropagation();
+		return false;
+	}
+
+	if (("change" === evt.type) && blocked) {
+		return;
+	}
+
+	let type = $(this).attr("id").split("_")[1];
+	let val = $(this).val();
+
+	if ("" === val) {
+		// fill the inputs with the empty string
+		$("#ipv6_text").not(":focus").val("");
+		$("#ipv6_dec").not(":focus").val("");
+		$("#ipv6_rfc1924").not(":focus").val("");
+
+		return;
+	}
+
+	let ret = [];
+
+	switch (type) {
+		case "text" :
+			val = expandIPv6(val);
+			// ensure val is a valid IP address
+			let ip_reg = /^(?:[0-9a-f]{4}:){7}[0-9a-f]{4}$/i;
+			if ( ! ip_reg.test(val)) {
+				ret[0] = val;
+				ret[1] = "---";
+				ret[2] = "---";
+				break;
+			}
+
+			ret[0] = val;
+			ret[1] = ipv6ToDecimal(val);
+			ret[2] = ipv6ToRfc1924(val);
+			break;
+		case "dec" :
+			// make sure the value is between 0 and 340282366920938463463374607431768211456
+			// or it's a decimal notation
+			if ( ! isValidIPv6Dec(val)) {
+				ret[0] = "---";
+				ret[1] = val;
+				ret[2] = "---";
+				break;
+			}
+
+			if (val.includes(":")) {
+				val = ipv6ExpandedDecimalToDecimal(val);
+			}
+
+			ret[0] = compressIPv6(decimalToIPv6(val));
+			ret[1] = val;
+			ret[2] = decimalToRfc1924(val);
+
+			break;
+		case "rfc1924" :
+			if (val.toUpperCase().startsWith("IPV6:")) {
+				val = val.substring("IPv6:".length);
+			}
+
+			let decimal = rfc1924ToDecimal(val);
+
+			ret[0] = decimalToIPv6(decimal);
+			ret[1] = decimal;
+			ret[2] = val;
+
+			break;
+	}
+
+	// fill the inputs with the returned values
+	$("#ipv6_text").not(":focus").val(ret[0]);
+	$("#ipv6_dec").not(":focus").val(ret[1]);
+	$("#ipv6_rfc1924").not(":focus").val(ret[2]);
+
+}, bindDelay);
+
+$("#ipv6_text_toggle").on("click", function (evt) {
+	let val = $("#ipv6_text").val();
+
+	// NOTE: these regular expressions are not meant to be complete or validation
+	// they are simply a quick way to determine which type of compression is being passed in
+	const full_regex = /^(?:[0-9a-f]{4}:){7}[0-9a-f]{4}$/i; // 2001:0db8:0000:0000:0000:3f62:e2a0:523f
+	const semi_full_regex = /^(?:0:|[0-9a-f]{4}:){7}(?:0|[0-9a-f]{4})$/i; // 2001:0db8:0:0:0:3f62:e2a0:523f (note leading 0 in second group)
+	const semi_compressed_regex = /^(?:[0-9a-f]{1,4}:){7}[0-9a-f]{1,4}$/i // 2001:db8:0:0:0:3f62:e2a0:523f (note missing leading 0 in second group)
+
+	let ret = "";
+
+	// check for fully compressed value
+	if (val.includes("::")) { // 2001:db8::3f62:e2a0:523f
+		// semi expand the value to no leading 0s, and no ::
+		ret = expandIPv6(val)
+			.replaceAll("0000", 'O') // note capital Oh
+			.replace(/:0+/g, ':') // so it doesn't get killed here
+			.replaceAll("O", '0'); // put lone zeros back
+	}
+	else if (full_regex.test(val)) {
+		// fully compress the value
+		ret = compressIPv6(val);
+	}
+	else if (semi_full_regex.test(val)) {
+		// fully expand the value by adding leading zeros to all parts
+		ret = expandIPv6(val);
+	}
+	else if (semi_compressed_regex.test(val)) {
+		// expand the value further by adding leading zeros to non-zero parts
+		ret = expandIPv6(val)
+			.replaceAll('0000', '0');
+	}
+	else {
+		// do nothing, it's not a valid regex
+		alert('Non-valid IPv6 address');
+		ret = val;
+	}
+
+	blocked = true;
+	setTimeout(function () {
+		blocked = false;
+	}, 500);
+
+	$("#ipv6_text").val(ret.toUpperCase());
+});
+
+$("#ipv6_dec_toggle").on("click", function (evt) {
+	let val = $("#ipv6_dec").val();
+
+	const parts_regex = /^(?:[0-9]{4}:){7}[0-9]{4}$/;
+	const full_regex = /a/;
+
+	let ret = "";
+
+	if (val.includes(":")) {
+		// grab the ipv6 from the text version
+		// largest possible value: 340282366920938463463374607431768211456 (2^128)
+		ret = ipv6ToDecimal($("#ipv6_text").val())
+	}
+	else {
+		// grab the ipv6 from the text version
+		let ip = expandIPv6($("#ipv6_text").val());
+		let dec_seg = ip.split(':').map(segment => parseInt(segment, 16));
+		ret = dec_seg.join(':');
+	}
+
+	blocked = true;
+	setTimeout(function () {
+		blocked = false;
+	}, 500);
+
+	$("#ipv6_dec").val(ret);
 });
 
 $("button.hash, button.hash_raw, button.hash_form").on("click", function (evt) {
