@@ -3,40 +3,14 @@
 	// FIXME: find out what caused the window[funcName] to fail saying that window[funcName] was not a function
 
 	// TODO: create IPv6 tools
-		// Expand/contract (zeros and :)
-		// convert to/from decimal (with :)
-		// convert to/from int (no :, but padding)
+		// Add buttons to IP tool inputs
+		// Allow and automatically remove square brackets around an IPv6 address
+		// A double colon should not be used to denote an omitted single section of zeros - SEE IF THIS IS AN ISSUE AND FIX
+		// convert to/from int (no :, but padding) - DONE (no padding)
 		// convert to/from binary (no :, but padding)
-		// Convert to/from RFC 1924 (ASCII85)
-			// 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~
-			// this may be different from normal ASCII85 encoding
-	/*
-	The conversion process is a simple one of division, taking the
-	remainders at each step, and dividing the quotient again, then
-	reading up the page, as is done for any other base conversion.
-
-	For example, consider the address shown above
-
-		1080:0:0:0:8:800:200C:417A
-
-	In decimal, considered as a 128-bit number, that is
-	21932261930451111902915077091070067066.
-
-	As we divide that successively by 85 the following remainders emerge:
-	51, 34, 65, 57, 58, 0, 75, 53, 37, 4, 19, 61, 31, 63, 12, 66, 46, 70,
-	68, 4.
-
-	Thus, in base85 the address is:
-
-		4-68-70-46-66-12-63-31-61-19-4-37-53-75-0-58-57-65-34-51.
-
-	Then, when encoded as specified above, this becomes:
-
-		4)+k&C#VzJ4br>0wv%Yp
-
-	This procedure is trivially reversed to produce the binary form of
-	the address from textually encoded format.
-	*/
+		// add ability to handle IPv6/IPv4 addresses and convert between them
+			// like 64:ff9b::192.0.2.128 <-> 64:ff9b::C000:280
+	// TODO: create CIDR tools for both
 
 	// TODO: add functionality to be able to change the rotation in the ROT-13 field
 	//		but prevent the new string from being sent to the translators (unless the send button is pressed)

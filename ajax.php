@@ -7,6 +7,12 @@ require_once 'vendor/morse/library/Text.php';
 require_once 'vendor/Base85.php';
 require_once 'vendor/Z85.php';
 
+if ( ! function_exists('str_contains')) {
+	function str_contains(string $haystack, string $needle): bool {
+		return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+	}
+}
+
 $algos = hash_algos();
 $skip_algos = [];
 $hashes = do_hashes($skip_algos); // see bottom of file
@@ -62,13 +68,6 @@ if ( ! empty($_POST['file'])) {
 
 
 // ========= FUNCTIONS ===================================
-
-
-if ( ! function_exists('str_contains')) {
-	function str_contains(string $haystack, string $needle): bool {
-		return $needle !== '' && mb_strpos($haystack, $needle) !== false;
-	}
-}
 
 function do_hashes(array $skip_algos): array {
 	$algos = hash_algos();
