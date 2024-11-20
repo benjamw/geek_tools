@@ -731,22 +731,23 @@ $("#ipv4_wrap").find("input").bindWithDelay("change keyup share:update", functio
 			break;
 		case "hex" :
 			// make sure there are only 4 bytes
-			let hex_reg = /^(?:([0-9a-f]{2})\s*){4}$/
-			if ( ! hex_reg.test(val)) {
+			let hex_reg = /^(?:0x\s*)?([0-9a-f]{2})\s*([0-9a-f]{2})\s*([0-9a-f]{2})\s*([0-9a-f]{2})\s*$/ig;
+			let hexets;
+			if (null === (hexets = hex_reg.exec(val))) {
 				ret[0] = "---";
 				ret[1] = "---";
 				ret[2] = val;
 				break;
 			}
 
-			let hexets = [...val.matchAll(hex_reg)];
+			hexets.shift(); // remove the global match
 			ret[0] = hexets.map(function (hex) {
 					return parseInt(hex, 16);
 				}).join(".")
 			ret[1] = hexets.reduce(function (ipInt, hex) {
 					return (ipInt << 8) + parseInt(hex, 16)
 				}, 0) >>> 0;
-			ret[2] = val;
+			ret[2] = hexets.join(" ");
 			break;
 	}
 
