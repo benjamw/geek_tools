@@ -3,6 +3,7 @@
 	// FIXME: find out what caused the window[funcName] to fail saying that window[funcName] was not a function
 
 	// TODO: create IPv6 tools
+		// Fix issues with compression
 		// Add buttons to IP tool inputs
 		// Allow and automatically remove square brackets around an IPv6 address
 		// A double colon should not be used to denote an omitted single section of zeros - SEE IF THIS IS AN ISSUE AND FIX

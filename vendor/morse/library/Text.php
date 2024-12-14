@@ -104,7 +104,7 @@ class Text {
      */
     public function fromMorse($morse) {
         $morse = str_replace($this->invalidCharacterReplacement . ' ', '', $morse);
-        $words = explode($this->wordSeparator, $morse);
+        $words = preg_split('%' . $this->wordSeparator . '|\s*[\r\n\t]\s*+%', $morse);
         $morse = array_map([$this, 'translateMorseWord'], $words);
         return implode(' ', $morse);
     }

@@ -124,7 +124,7 @@ function do_encodings(): array {
 			$raw = $morse->fromMorse($val);
 			break;
 		case 'base64' :
-			$raw = base64_decode_both(preg_replace('|\s+|', '', $val));
+			$raw = base64_decode_both(preg_replace('%\s+%', '', $val));
 			break;
 		case 'base85' :
 			$raw = $base85->decode($val);

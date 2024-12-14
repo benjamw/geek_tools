@@ -1,6 +1,7 @@
 .idea
 
 *.log
-*_log
 old_index.php
+error_log
+*.log
 info.php
