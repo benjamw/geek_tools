@@ -489,8 +489,8 @@ EOHTML;
 						<?php foreach ($algos as $algo) { ?>
 							<?php
 								$algoname = slug($algo);
-								$bad = ['md4', 'md5', 'sha1', 'ripemd128', 'crc32', 'haval128,3'];
-								$ok = ['sha256', 'sha512'];
+								$bad = ['md4', 'md5', 'sha1', 'ripemd128', 'haval128,3', 'haval128,4'];
+								$ok = ['sha256', 'sha512', 'gost'];
 								$good = ['sha3-512'];
 								$class = '';
 								if (in_array($algo, $bad)) {
