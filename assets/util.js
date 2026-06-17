@@ -48,3 +48,44 @@ export function triggerShareUpdate(el) {
 export function triggerEvent(el, type) {
 	el.dispatchEvent(new Event(type, { bubbles: true }));
 }
+
+// Cross-script migration state. The classic process.js and the vanilla
+// modules share the "blocked" semaphore (set briefly after a programmatic
+// edit to suppress the resulting change event) via window.__geek.
+const shared = (function () {
+	if (typeof window === 'undefined') {
+		return { blocked: false };
+	}
+	window.__geek = window.__geek || {};
+	if (typeof window.__geek.blocked === 'undefined') {
+		window.__geek.blocked = false;
+	}
+	return window.__geek;
+})();
+
+export function isBlocked() {
+	return !!shared.blocked;
+}
+
+export function block(wait) {
+	shared.blocked = true;
+	setTimeout(function () {
+		shared.blocked = false;
+	}, wait);
+}
+
+// Left-pad `str` up to the next multiple of `num` using `char`.
+// Replaces the String.prototype.modPad extension.
+export function modPad(str, num, char) {
+	let ret = String(str);
+	const pad = ret.length % num;
+	if (pad) {
+		if (pad < char.length) {
+			char = char.slice(-pad);
+		}
+		while (ret.length % num) {
+			ret = char + ret;
+		}
+	}
+	return ret;
+}
