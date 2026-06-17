@@ -1,6 +1,7 @@
 import { Ruler } from './ruler.js';
 import { generateRandomIP } from './rand_ip.js';
 import { initButtons } from './buttons.js';
+import { initDigits } from './digits.js';
 
 function sizeRuler() {
 	const canvas = document.getElementById('ruler');
@@ -38,3 +39,4 @@ function initRandomIp() {
 initRuler();
 initRandomIp();
 initButtons();
+initDigits();

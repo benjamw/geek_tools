@@ -1,10 +1,27 @@
 let bindDelay = 500; // ms
-let blocked = false;
 
-const BIN_REGEX = /[^01]+/img;
-const OCT_REGEX = /[^0-7]+/img;
-const DEC_REGEX = /[^0-9-]+/img;
-const HEX_REGEX = /[^0-9a-f]+/img;
+// migration bridges (removed once jQuery is gone in step 3f):
+// 1) share the "blocked" semaphore between classic process.js and the
+//    vanilla modules via window.__geek.
+window.__geek = window.__geek || {};
+if (typeof window.__geek.blocked === "undefined") {
+	window.__geek.blocked = false;
+}
+
+// 2) route jQuery .trigger("share:update") through a native CustomEvent so
+//    both jQuery handlers (bound via addEventListener) and vanilla
+//    addEventListener handlers receive it.
+(function ($) {
+	const _trigger = $.fn.trigger;
+	$.fn.trigger = function (type) {
+		if ("share:update" === type) {
+			return this.each(function () {
+				this.dispatchEvent(new CustomEvent("share:update"));
+			});
+		}
+		return _trigger.apply(this, arguments);
+	};
+})(jQuery);
 
 const base85Chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!#$%&()*+-;<=>?@^_`{|}~';
 
@@ -67,33 +84,6 @@ if (!String.prototype.caesar) {
 
 function slug(name) {
 	return name.replace(/[\\\\/*+-]/img, "_")
-}
-
-function group(str, num, reverse) {
-	if (!str) {
-		return "";
-	}
-
-	if ("undefined" === typeof reverse) {
-		reverse = true;
-	}
-	reverse = !!reverse;
-
-	let regex = new RegExp(".{1," + num + "}", "img");
-	if (reverse) {
-		return str.split("").reverse().join("").match(regex).map(function (s) {
-			return s.split("").reverse().join("");
-		}).reverse().join(" ");
-	}
-	else {
-		let arr = str.match(regex);
-		if (arr) {
-			return arr.join(" ");
-		}
-		else {
-			return "";
-		}
-	}
 }
 
 function check_base64() {
@@ -239,204 +229,6 @@ function ipv6ExpandedDecimalToDecimal(expandedDecimal) {
 	);
 }
 
-$("#int_grouped").on("change click share:update", function (evt) {
-	$("#int_split").prop("checked", false);
-	$("#int_padded").prop("checked", false);
-	if ("share:update" !== evt.type) {
-		$("textarea.digits:first").trigger("share:update");
-	}
-});
-
-$("#int_padded").on("change click share:update", function (evt) {
-	$("#int_split").prop("checked", false);
-	$("#int_grouped").prop("checked", false);
-	if ("share:update" !== evt.type) {
-		$("textarea.digits:first").trigger("share:update");
-	}
-});
-
-$("#int_split").on("change click share:update", function (evt) {
-	$("#int_padded").prop("checked", false);
-	$("#int_grouped").prop("checked", false);
-	if ("share:update" !== evt.type) {
-		$("textarea.digits:first").trigger("share:update");
-	}
-});
-
-$("textarea.digits").bindWithDelay("change keyup share:update", function (evt) {
-	// if there was a modifier pressed (Alt, Ctrl, etc), don't do anything
-	// the change event will capture any changes like cuts or pastes
-	if (evt.altKey || evt.ctrlKey || evt.metaKey) {
-		evt.preventDefault();
-		evt.stopPropagation();
-		return false;
-	}
-
-	if (("change" === evt.type) && blocked) {
-		return;
-	}
-
-	// do the simple base conversions
-	let type = $(this).attr("id").split("_")[1];
-	let val = $(this).val();
-	let converted = "";
-	let split = $("#int_split").prop("checked");
-	let padded = $("#int_padded").prop("checked");
-	let grouped = $("#int_grouped").prop("checked");
-
-	if ("" === val.replace(/[\s,.]+/g, "")) {
-		$("#conv_bin").not(":focus").val("");
-		$("#conv_oct").not(":focus").val("");
-		$("#conv_dec").not(":focus").val("");
-		$("#conv_hex").not(":focus").val("");
-
-		// pass the emptiness along to the other areas
-		if ("share:update" !== evt.type) {
-			$("#conv_utf8bytes").not(":focus").val("").trigger("share:update");
-			$("#conv_bytes").not(":focus").val("").trigger("share:update");
-		}
-
-		return;
-	}
-
-	if (grouped) {
-		val = val.replace(/[\s,.]+/g, "");
-
-		switch (type) {
-			case "bin" :
-				val = val.replace(BIN_REGEX, "");
-				converted = BigInteger.parse(val, 2);
-				break;
-			case "oct" :
-				val = val.replace(OCT_REGEX, "");
-				converted = BigInteger.parse(val, 8);
-				break;
-			case "dec" :
-				val = val.replace(DEC_REGEX, "");
-				converted = BigInteger.parse(val, 10);
-				// convert 2s compliment negative numbers to unsigned 256
-				if ((-128 <= converted) && (converted < 0)) {
-					converted = converted.add(256);
-				}
-				break;
-			case "hex" :
-				val = val.replace(HEX_REGEX, "");
-				converted = BigInteger.parse(val, 16);
-				break;
-			default :
-				// do nothing
-				break;
-		}
-
-		// convert the converted back to the rest
-		$("#conv_bin").not(":focus").val(group(converted.toString(2).modPad(8, "0"), 8));
-		$("#conv_oct").not(":focus").val(group(converted.toString(8).modPad(3, "0"), 3));
-		$("#conv_dec").not(":focus").val(group(converted.toString(10), 3));
-		$("#conv_hex").not(":focus").val(group(converted.toString(16).modPad(2, "0"), 2));
-
-		// pass the bytes along to the other areas
-		if ("share:update" !== evt.type) {
-			$("#conv_utf8bytes").not(":focus").val(group(converted.toString(16).modPad(2, "0"), 2)).trigger("share:update");
-			$("#conv_bytes").not(":focus").val(group(converted.toString(16).modPad(2, "0"), 2)).trigger("share:update");
-		}
-	}
-	else {
-		let regex = null;
-		switch (type) {
-			case "bin" :
-				regex = BIN_REGEX;
-				break;
-			case "oct" :
-				regex = OCT_REGEX;
-				break;
-			case "dec" :
-				regex = DEC_REGEX;
-				break;
-			case "hex" :
-				regex = HEX_REGEX;
-				break;
-		}
-
-		let val_array = val.replace(/^\s+|\s+$/img, "").replace(regex, " ").replace(/\s+/img, " ").split(" ");
-
-		let outvar = {
-			"bin": [],
-			"oct": [],
-			"dec": [],
-			"hex": []
-		};
-		for (let i = 0, len = val_array.length; i < len; i += 1) {
-			val = val_array[i];
-
-			switch (type) {
-				case "bin" :
-					val = val.replace(/[^01]+/img, "");
-					converted = BigInteger.parse(val, 2);
-					break;
-				case "oct" :
-					val = val.replace(/[^0-7]+/img, "");
-					converted = BigInteger.parse(val, 8);
-					break;
-				case "dec" :
-					val = val.replace(/[^0-9-]+/img, "");
-					converted = BigInteger.parse(val, 10);
-					// convert 2s compliment negative numbers to unsigned 256
-					if ((-128 <= converted) && (converted < 0)) {
-						converted = converted.add(256);
-					}
-					break;
-				case "hex" :
-					val = val.replace(/[^0-9a-f]+/img, "");
-					converted = BigInteger.parse(val, 16);
-					break;
-				default :
-					// do nothing
-					break;
-			}
-
-			outvar.bin.push(converted.toString(2));
-			outvar.oct.push(converted.toString(8));
-			outvar.dec.push(converted.toString(10));
-			outvar.hex.push(converted.toString(16));
-		}
-
-		if (padded) {
-			let padlen = 0;
-			for (let type in outvar) {
-				if (outvar.hasOwnProperty(type)) {
-					switch (type) {
-						case "bin" :
-							padlen = 8;
-							break;
-						case "oct" :
-							padlen = 3;
-							break;
-						case "hex" :
-							padlen = 2;
-							break;
-					}
-
-					for (let i = 0; i < outvar[type].length; i += 1) {
-						outvar[type][i] = outvar[type][i].modPad(padlen, "0")
-					}
-				}
-			}
-
-			// pass the bytes along to the other areas
-			// but only if padded
-			if ("share:update" !== evt.type) {
-				$("#conv_utf8bytes").not(":focus").val(outvar.hex.join(" ")).trigger("share:update");
-				$("#conv_bytes").not(":focus").val(outvar.hex.join(" ")).trigger("share:update");
-			}
-		}
-
-		$("#conv_bin").not(":focus").val(outvar.bin.join(" "));
-		$("#conv_oct").not(":focus").val(outvar.oct.join(" "));
-		$("#conv_dec").not(":focus").val(outvar.dec.join(" "));
-		$("#conv_hex").not(":focus").val(outvar.hex.join(" "));
-	}
-}, bindDelay);
-
 $("textarea.color").bindWithDelay("change keyup", function (evt) {
 	// if there was a modifier pressed (Alt, Ctrl, etc), don't do anything
 	// the change event will capture any changes like cuts or pastes
@@ -446,7 +238,7 @@ $("textarea.color").bindWithDelay("change keyup", function (evt) {
 		return false;
 	}
 
-	if (("change" === evt.type) && blocked) {
+	if (("change" === evt.type) && window.__geek.blocked) {
 		return;
 	}
 
@@ -523,7 +315,7 @@ $("#converters").find("textarea").bindWithDelay("change keyup share:update", fun
 		return false;
 	}
 
-	if (("change" === evt.type) && blocked) {
+	if (("change" === evt.type) && window.__geek.blocked) {
 		return;
 	}
 
@@ -574,7 +366,7 @@ $("#utf8").find("textarea").bindWithDelay("change keyup share:update", function 
 		return false;
 	}
 
-	if (("change" === evt.type) && blocked) {
+	if (("change" === evt.type) && window.__geek.blocked) {
 		return;
 	}
 
@@ -628,9 +420,9 @@ $("#utf8").find("textarea").bindWithDelay("change keyup share:update", function 
 $("#caesar").on("change click", function (evt) {
 	evt.stopPropagation();
 
-	blocked = true;
+	window.__geek.blocked = true;
 	setTimeout(function () {
-		blocked = false;
+		window.__geek.blocked = false;
 	}, 500);
 
 	let str = $('#conv_raw').val();
@@ -642,9 +434,9 @@ $("#caesar").on("change click", function (evt) {
 $("#b64url").on("change click", function (evt) {
 	evt.stopPropagation();
 
-	blocked = true;
+	window.__geek.blocked = true;
 	setTimeout(function () {
-		blocked = false;
+		window.__geek.blocked = false;
 	}, 500);
 
 	let str = $("#conv_base64").val();
@@ -668,7 +460,7 @@ $("#ipv4_wrap").find("input").bindWithDelay("change keyup share:update", functio
 		return false;
 	}
 
-	if (("change" === evt.type) && blocked) {
+	if (("change" === evt.type) && window.__geek.blocked) {
 		return;
 	}
 
@@ -779,7 +571,7 @@ $("#ipv6_wrap").find("input").bindWithDelay("change keyup share:update", functio
 		return false;
 	}
 
-	if (("change" === evt.type) && blocked) {
+	if (("change" === evt.type) && window.__geek.blocked) {
 		return;
 	}
 
@@ -891,9 +683,9 @@ $("#ipv6_text_toggle").on("click", function (evt) {
 		ret = val;
 	}
 
-	blocked = true;
+	window.__geek.blocked = true;
 	setTimeout(function () {
-		blocked = false;
+		window.__geek.blocked = false;
 	}, 500);
 
 	$("#ipv6_text").val(ret.toUpperCase());
@@ -923,9 +715,9 @@ $("#ipv6_dec_toggle").on("click", function (evt) {
 			.join(':');
 	}
 
-	blocked = true;
+	window.__geek.blocked = true;
 	setTimeout(function () {
-		blocked = false;
+		window.__geek.blocked = false;
 	}, 500);
 
 	$("#ipv6_dec").val(ret);
