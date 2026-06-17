@@ -40,8 +40,17 @@ function initRandomIp() {
 	document.getElementById('rand_ipv6').value = generateRandomIP(6);
 }
 
+// Replaces ajax.php's guidv4(): a cryptographically secure RFC 4122 v4 UUID.
+function initRandomUuid() {
+	const el = document.getElementById('rand_uuid');
+	if (el && window.crypto && crypto.randomUUID) {
+		el.value = crypto.randomUUID();
+	}
+}
+
 initRuler();
 initRandomIp();
+initRandomUuid();
 initButtons();
 initDigits();
 initConverters();

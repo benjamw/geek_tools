@@ -25,13 +25,6 @@
 	// TODO: add a checkbox to add any demarcation characters for the encoded strings (UUEncode, Z85, etc)
 	// TODO: remove any of the above automatically if found
 
-/**
- * @var string $uuid
- * @var string[] $algos
- * @var string[] $hashes
- */
-require_once 'ajax.php';
-
 $buttons = <<< EOHTML
 	<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
 	<button type="button" class="hash btn btn-sm btn-success">Hash</button>
@@ -98,10 +91,7 @@ EOHTML;
 								</label>
 							</label>
 							<textarea id="conv_base64" class="form-control" data-bs-theme="light"></textarea>
-							<form method="post" style="display:inline;">
-								<input type="hidden" name="file" id="file">
-								<button type="button" class="btn btn-sm btn-warning file" title="Download File">File</button>
-							</form>
+							<button type="button" class="btn btn-sm btn-warning file" title="Download File">File</button>
 							<?= $buttons ?>
 						</div>
 					</div>
@@ -278,8 +268,8 @@ EOHTML;
 					<div class="row">
 						<div class="form-group col">
 							<label for="rand_uuid"><abbr title="Universally Unique IDentifier">UUID</abbr>
-								(<abbr title="Generated with PHP random_bytes function">cryptographically secure</abbr>)</label>
-							<input id="rand_uuid" class="form-control" type="text" disabled value="<?= $uuid ?>">
+								(<abbr title="Generated with the Web Crypto API">cryptographically secure</abbr>)</label>
+							<input id="rand_uuid" class="form-control" type="text" disabled>
 						</div>
 					</div>
 				</div>
