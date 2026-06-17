@@ -2,6 +2,8 @@ import { Ruler } from './ruler.js';
 import { generateRandomIP } from './rand_ip.js';
 import { initButtons } from './buttons.js';
 import { initDigits } from './digits.js';
+import { initConverters } from './converters.js';
+import { initUtf8 } from './utf8.js';
 
 function sizeRuler() {
 	const canvas = document.getElementById('ruler');
@@ -40,3 +42,5 @@ initRuler();
 initRandomIp();
 initButtons();
 initDigits();
+initConverters();
+initUtf8();

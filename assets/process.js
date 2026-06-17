@@ -86,11 +86,6 @@ function slug(name) {
 	return name.replace(/[\\\\/*+-]/img, "_")
 }
 
-function check_base64() {
-	let b64_string = $("#conv_base64").val();
-	$("#b64url").prop("checked", (-1 !== b64_string.indexOf("-") || -1 !== b64_string.indexOf("_")));
-}
-
 function expandIPv6(ip) {
 	// split on the :: compression marker (at most one is allowed)
 	let head, tail;
@@ -306,117 +301,6 @@ $("textarea.color").bindWithDelay("change keyup", function (evt) {
 	}
 }, bindDelay * 2);
 
-$("#converters").find("textarea").bindWithDelay("change keyup share:update", function (evt) {
-	// if there was a modifier pressed (Alt, Ctrl, etc), don't do anything
-	// the change event will capture any changes like cuts or pastes
-	if (evt.altKey || evt.ctrlKey || evt.metaKey) {
-		evt.preventDefault();
-		evt.stopPropagation();
-		return false;
-	}
-
-	if (("change" === evt.type) && window.__geek.blocked) {
-		return;
-	}
-
-	let type = $(this).attr("id").split("_")[1];
-	let val = $(this).val();
-
-	if (type === "base64") {
-		check_base64();
-	}
-
-	// do the ajax conversions
-	$.ajax(window.location.href, {
-		method: "POST",
-		dataType: "json",
-		data: {
-			encodings: true,
-			val: val,
-			from: type
-		},
-		success: function (data) {
-			$("#caesar").val(13);
-			for (let enc in data) {
-				if (data.hasOwnProperty(enc)) {
-					if (false === data[enc]) {
-						data[enc] = "";
-					}
-
-					$("#conv_" + enc).not(":focus").val(data[enc]);
-
-					// pass the bytes along to the other areas
-					if (("share:update" !== evt.type) && ("bytes" === enc)) {
-						$("#int_padded").prop("checked", true).trigger("share:update");
-						$("#conv_utf8bytes").not(":focus").val(data[enc]).trigger("share:update");
-						$("#conv_hex").not(":focus").val(data[enc]).trigger("share:update");
-					}
-				}
-			}
-		}
-	});
-}, bindDelay);
-
-$("#utf8").find("textarea").bindWithDelay("change keyup share:update", function (evt) {
-	// if there was a modifier pressed (Alt, Ctrl, etc), don't do anything
-	// the change event will capture any changes like cuts or pastes
-	if (evt.altKey || evt.ctrlKey || evt.metaKey) {
-		evt.preventDefault();
-		evt.stopPropagation();
-		return false;
-	}
-
-	if (("change" === evt.type) && window.__geek.blocked) {
-		return;
-	}
-
-	let type = $(this).attr("id").split("_")[1].slice(4);
-	let val = $(this).val();
-
-	if ("" === val) {
-		// fill the textareas with the empty string
-		$("#conv_utf8char").not(":focus").val("");
-		$("#conv_utf8htmldec").not(":focus").val("");
-		$("#conv_utf8htmlhex").not(":focus").val("");
-		$("#conv_utf8bytes").not(":focus").val("");
-		$("#conv_utf8cbytes").not(":focus").val("");
-		$("#conv_utf8esc").not(":focus").val("");
-		$("#conv_utf8code").not(":focus").val("");
-
-		// pass the emptiness along to the other areas
-		if ("share:update" !== evt.type) {
-			$("#int_padded").prop("checked", true).trigger("share:update");
-			$("#conv_hex").not(":focus").val("").trigger("share:update");
-			$("#conv_bytes").not(":focus").val("").trigger("share:update");
-		}
-
-		return
-	}
-
-	let funcName = "from" + type.charAt(0).toUpperCase() + type.slice(1);
-	let ret = window[funcName](val);
-
-	// do conversions
-	ret.push(ret[2].map(x => x.toString(16).toUpperCase()));
-	ret.push(ret[3].map(x => x.padStart(4, "0")));
-
-	// fill the textareas with the returned values
-	$("#conv_utf8char").not(":focus").val(ret[0]);
-	$("#conv_utf8bytes").not(":focus").val(ret[1].toUpperCase());
-	$("#conv_utf8cbytes").not(":focus").val("\\x" + ret[1].toLowerCase().split(" ").join("\\x"));
-	$("#conv_utf8htmldec").not(":focus").val("&#" + ret[2].join(";&#") + ";");
-	$("#conv_utf8htmlhex").not(":focus").val("&#x" + ret[3].join(";&#x") + ";");
-	$("#conv_utf8esc").not(":focus").val("\\u" + ret[4].join("\\u"));
-	$("#conv_utf8code").not(":focus").val("U+" + ret[4].join(" U+"));
-
-	// pass the bytes along to the other areas
-	if ("share:update" !== evt.type) {
-		$("#int_padded").prop("checked", true).trigger("share:update");
-		$("#conv_hex").not(":focus").val(ret[1].toUpperCase()).trigger("share:update");
-		$("#conv_bytes").not(":focus").val(ret[1].toUpperCase()).trigger("share:update");
-	}
-}, bindDelay);
-
 $("#caesar").on("change click", function (evt) {
 	evt.stopPropagation();
 
@@ -429,26 +313,6 @@ $("#caesar").on("change click", function (evt) {
 	let amt = $(this).val();
 
 	$("#conv_rot13").val(str.caesar(amt));
-});
-
-$("#b64url").on("change click", function (evt) {
-	evt.stopPropagation();
-
-	window.__geek.blocked = true;
-	setTimeout(function () {
-		window.__geek.blocked = false;
-	}, 500);
-
-	let str = $("#conv_base64").val();
-
-	if ($("#b64url").prop("checked")) {
-		str = str.replace(/\+/g, "-").replace(/\//g, "_");
-	}
-	else {
-		str = str.replace(/-/g, "+").replace(/_/g, "/");
-	}
-
-	$("#conv_base64").val(str);
 });
 
 $("#ipv4_wrap").find("input").bindWithDelay("change keyup share:update", function (evt) {

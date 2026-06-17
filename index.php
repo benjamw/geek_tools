@@ -70,10 +70,6 @@ EOHTML;
 
 	<!-- bindWithDelay -->
 	<script src="assets/bind_with_delay.js"></script>
-
-	<!-- UTF8 Converter -->
-	<!-- original from http://www.endmemo.com/unicode/unicodeconverter.php : http://www.endmemo.com/unicode/script/convertuni.js -->
-	<script src="assets/utf8_conv.js"></script>
 </head>
 <body>
 

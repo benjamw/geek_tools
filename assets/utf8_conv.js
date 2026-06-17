@@ -1,23 +1,7 @@
-// https://github.com/uxitten/polyfill/blob/master/string.polyfill.js
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
-if (!String.prototype.padStart) {
-	String.prototype.padStart = function padStart(targetLength, padString) {
-		targetLength = targetLength >> 0; //truncate if number or convert non-number to 0;
-		padString = String((typeof padString !== 'undefined' ? padString : ' '));
-		if (this.length > targetLength) {
-			return String(this);
-		}
-		else {
-			targetLength = targetLength - this.length;
-			if (targetLength > padString.length) {
-				padString += padString.repeat(targetLength / padString.length); //append to original to ensure we are longer than needed
-			}
-			return padString.slice(0, targetLength) + String(this);
-		}
-	};
-}
-
-let CP = [];
+// UTF-8 / code-point converters. Originally from
+// http://www.endmemo.com/unicode/unicodeconverter.php
+// Converted to an ES module: each exported from*() is pure and returns
+// [char, bytes, codePoints] (the old global CP buffer is gone).
 
 function dh(a, p) {
 	p = p || 0;
@@ -33,10 +17,10 @@ function pi(a) {
 	return parseInt(a, 16)
 }
 
-function out() {
+function out(CP) {
 	return [
-		toChar(),
-		toBytes(),
+		_toChar(CP),
+		_toBytes(CP),
 		CP
 	];
 }
@@ -59,10 +43,6 @@ function _toChar(_CP) {
 	}
 
 	return out;
-}
-
-function toChar() {
-	return _toChar(CP);
 }
 
 function _toBytes(_CP) {
@@ -97,10 +77,6 @@ function _toBytes(_CP) {
 	}
 
 	return out
-}
-
-function toBytes() {
-	return _toBytes(CP);
 }
 
 // TODO: clean them up so they're not so obfuscated
@@ -147,9 +123,8 @@ function _fromChar(s) {
 	return _CP;
 }
 
-function fromChar(s) {
-	CP = _fromChar(s);
-	return out();
+export function fromChar(s) {
+	return out(_fromChar(s));
 }
 
 function _fromBytes(s) {
@@ -222,9 +197,8 @@ function _fromBytes(s) {
 	return _CP;
 }
 
-function fromBytes(s) {
-	CP = _fromBytes(s);
-	return out();
+export function fromBytes(s) {
+	return out(_fromBytes(s));
 }
 
 function _fromCbytes(s) {
@@ -232,9 +206,8 @@ function _fromCbytes(s) {
 	return _fromBytes(s);
 }
 
-function fromCbytes(s) {
-	CP = _fromCbytes(s);
-	return out();
+export function fromCbytes(s) {
+	return out(_fromCbytes(s));
 }
 
 function _fromHtmldec(s) {
@@ -246,8 +219,8 @@ function _fromHtmldec(s) {
 	return s.map(x => parseInt(x, 10));
 }
 
-function fromHtmldec(s) {
-	CP = [];
+export function fromHtmldec(s) {
+	let CP = [];
 
 	let match,
 		used = 0;
@@ -266,7 +239,7 @@ function fromHtmldec(s) {
 		CP = CP.concat(_fromChar(s.slice(used)));
 	}
 
-	return out();
+	return out(CP);
 }
 
 function _fromHtmlhex(s) {
@@ -274,8 +247,8 @@ function _fromHtmlhex(s) {
 	return hex2dec(s);
 }
 
-function fromHtmlhex(s) {
-	CP = [];
+export function fromHtmlhex(s) {
+	let CP = [];
 
 	let match,
 		used = 0;
@@ -294,7 +267,7 @@ function fromHtmlhex(s) {
 		CP = CP.concat(_fromChar(s.slice(used)));
 	}
 
-	return out();
+	return out(CP);
 }
 
 function _fromEsc(s) {
@@ -302,9 +275,8 @@ function _fromEsc(s) {
 	return hex2dec(s);
 }
 
-function fromEsc(s) {
-	CP = _fromEsc(s);
-	return out();
+export function fromEsc(s) {
+	return out(_fromEsc(s));
 }
 
 function _fromCode(s) {
@@ -312,7 +284,6 @@ function _fromCode(s) {
 	return hex2dec(s);
 }
 
-function fromCode(s) {
-	CP = _fromCode(s);
-	return out();
+export function fromCode(s) {
+	return out(_fromCode(s));
 }
