@@ -1,7 +1,7 @@
 // Hashes section: the per-textarea "Hash" / "Hash Bytes" buttons and the
 // "Submit" button in the #hashes form compute every digest client-side via
 // hash-wasm and write them into the #hash_* cells. The table rows are built
-// here too (a port of ajax.php's do_hashes + the index.php render loop).
+// here too (a port of the former PHP backend's do_hashes + render loop).
 
 import * as hashwasm from "https://cdn.jsdelivr.net/npm/hash-wasm@4/dist/index.esm.js";
 

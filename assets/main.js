@@ -48,9 +48,29 @@ function initRandomUuid() {
 	}
 }
 
+// Ask the optional ajax.php backend for the caller's IP. Reveal the banner on
+// success; leave it hidden if the endpoint is absent (404) or unreachable.
+function initCurrentIp() {
+	const box = document.getElementById('ip');
+	if (!box) {
+		return;
+	}
+	fetch('ajax.php?ip=1').then(function (resp) {
+		return resp.ok ? resp.text() : null;
+	}, function () {
+		return null;
+	}).then(function (ip) {
+		if (ip) {
+			box.querySelector('span').textContent = ip;
+			box.hidden = false;
+		}
+	});
+}
+
 initRuler();
 initRandomIp();
 initRandomUuid();
+initCurrentIp();
 initButtons();
 initDigits();
 initConverters();

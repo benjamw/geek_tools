@@ -1,42 +1,4 @@
-<?php
-
-	// FIXME: find out what caused the window[funcName] to fail saying that window[funcName] was not a function
-
-	// TODO: create IPv6 tools
-		// Fix issues with compression
-		// Add buttons to IP tool inputs
-		// Allow and automatically remove square brackets around an IPv6 address
-		// A double colon should not be used to denote an omitted single section of zeros - SEE IF THIS IS AN ISSUE AND FIX
-		// convert to/from int (no :, but padding) - DONE (no padding)
-		// convert to/from binary (no :, but padding)
-		// add ability to handle IPv6/IPv4 addresses and convert between them
-			// like 64:ff9b::192.0.2.128 <-> 64:ff9b::C000:280
-	// TODO: create CIDR tools for both
-
-	// TODO: add functionality to be able to change the rotation in the ROT-13 field
-	//		but prevent the new string from being sent to the translators (unless the send button is pressed)
-	//		and just do the translation in the rot-13 box from the contents of the raw box
-
-
-	// TODO: Test all encoding and decoding functions to make sure they are working both ways
-	// TODO: get xxencoding working
-	// TODO: add a checkbox to add the <~ ... ~> from the ends of the ASCII85 encoded string, <~n=Q)*n=Q)-n=Q)Y~>
-	// TODO: do the above but removing automatically if found
-	// TODO: add a checkbox to add any demarcation characters for the encoded strings (UUEncode, Z85, etc)
-	// TODO: remove any of the above automatically if found
-
-$buttons = <<< EOHTML
-	<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
-	<button type="button" class="hash btn btn-sm btn-success">Hash</button>
-	<span class="msg"></span>
-	<span class="float-end">
-		<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
-		<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
-	</span>
-EOHTML;
-
-?>
-<!doctype html><!-- PHP Version: <?= phpversion() ?> -->
+<!doctype html>
 <html lang="en" data-bs-theme="dark">
 <head>
 
@@ -62,8 +24,8 @@ EOHTML;
 
 <div class="container-fluid">
 
-	<div id="ip">
-		Your IP: <span><?= $_SERVER['REMOTE_ADDR']; ?></span><br>
+	<div id="ip" hidden>
+		Your IP: <span></span><br>
 	</div>
 
 	<div class="row row-cols-sm-1 row-cols-md-2">
@@ -80,7 +42,13 @@ EOHTML;
 							<textarea id="conv_raw" class="form-control" data-bs-theme="light"></textarea>
 							<textarea id="conv_bytes" class="form-control bytes hidden" data-bs-theme="light"></textarea>
 							<button type="button" class="btn btn-sm btn-warning html" title="Open as HTML in new window">HTML</button>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_base64">Base64: ( <span class="example">+</span> and <span class="example">/</span> )
@@ -92,7 +60,13 @@ EOHTML;
 							</label>
 							<textarea id="conv_base64" class="form-control" data-bs-theme="light"></textarea>
 							<button type="button" class="btn btn-sm btn-warning file" title="Download File">File</button>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 
@@ -100,12 +74,24 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_base85">Base85 (<abbr title="American Standard Code for Information Interchange">ASCII</abbr>85):</label>
 							<textarea id="conv_base85" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_z85">Z85:</label>
 							<textarea id="conv_z85" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 
@@ -113,12 +99,24 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_quoted">Quoted Printable:</label>
 							<textarea id="conv_quoted" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_url"><abbr title="Uniform Resource Locator">URL</abbr> Encoded:</label>
 							<textarea id="conv_url" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 
@@ -126,12 +124,24 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_uuencode">UUEncode:</label>
 							<textarea id="conv_uuencode" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_puny">Punycode:</label>
 							<textarea id="conv_puny" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 
@@ -139,12 +149,24 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_yenc">yEnc:</label>
 							<textarea id="conv_yenc" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_xxencode">XXEncode: (not yet functional)</label>
 							<textarea id="conv_xxencode" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div> -->
 
@@ -153,12 +175,24 @@ EOHTML;
 							<label for="conv_rot13">Rot-<input type="number" id="caesar" class="form-control input-xs" max="26" min="-26" step="1" value="13">
 								(Caesar cipher):</label>
 							<textarea id="conv_rot13" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_rev">Reverse:</label>
 							<textarea id="conv_rev" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 
@@ -166,12 +200,24 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_morse">Morse Code:</label>
 							<textarea id="conv_morse" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_code">A &rarr; 1:</label>
 							<textarea id="conv_code" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 
@@ -292,25 +338,49 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_bin">Binary:</label>
 							<textarea id="conv_bin" class="form-control digits" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_oct">Octal:</label>
 							<textarea id="conv_oct" class="form-control digits" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col">
 							<label for="conv_dec">Decimal:</label>
 							<textarea id="conv_dec" class="form-control digits" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_hex">Hexadecimal:</label>
 							<textarea id="conv_hex" class="form-control digits bytes" data-bs-theme="light"></textarea>
 							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as raw bytes">Hash Bytes</button>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -324,7 +394,13 @@ EOHTML;
 						<div class="form-group col">
 							<label for="conv_utf8char"><abbr title="Unicode Transformation Format">UTF</abbr>-8: ( 😃√π! )</label>
 							<textarea id="conv_utf8char" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 					<div class="row">
@@ -332,36 +408,72 @@ EOHTML;
 							<label for="conv_utf8bytes">Bytes: ( <span class="example">F0 9F 98 83 E2 88 9A CF 80 21</span> )</label>
 							<textarea id="conv_utf8bytes" class="form-control bytes" data-bs-theme="light"></textarea>
 							<button type="button" class="btn btn-sm btn-warning hash_raw" title="Hash the bytes as raw bytes">Hash Bytes</button>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_utf8cbytes"><abbr title="Escaped">Esc</abbr>.: ( <span class="example">\xf0\x9f\x98\x83\xe2\x88\x9a\xcf\x80\x21</span> )</label>
 							<textarea id="conv_utf8cbytes" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col">
 							<label for="conv_utf8htmldec"><abbr title="HyperText Markup Language">HTML</abbr> Decimal <abbr title="Numerical Character Reference">NCR</abbr>: ( <span class="example">&amp;#128515;&amp;#8730;&amp;#960;&amp;#33;</span> )</label>
 							<textarea id="conv_utf8htmldec" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_utf8htmlhex"><abbr title="HyperText Markup Language">HTML</abbr> Hex <abbr title="Numerical Character Reference">NCR</abbr>: ( <span class="example">&amp;#x1F603;&amp;#x221A;&amp;#x3C0;&amp;#x21;</span> )</label>
 							<textarea id="conv_utf8htmlhex" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col">
 							<label for="conv_utf8esc">Escaped Unicode: ( <span class="example">\u1F603\u221A\u3C0\u21</span> )</label>
 							<textarea id="conv_utf8esc" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 						<div class="form-group col">
 							<label for="conv_utf8code">Code Point: ( <span class="example">U+1F603 U+221A U+3C0 U+21</span> )</label>
 							<textarea id="conv_utf8code" class="form-control" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
+							<button type="button" class="copy btn btn-sm btn-primary">Copy</button>
+							<button type="button" class="hash btn btn-sm btn-success">Hash</button>
+							<span class="msg"></span>
+							<span class="float-end">
+								<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
+								<button type="button" class="clear btn btn-sm btn-secondary">Clear</button>
+							</span>
 						</div>
 					</div>
 				</div>
@@ -426,9 +538,9 @@ EOHTML;
 			<section class="card">
 				<div class="card-body">
 					<div class="form-group">
-						<form method="post" action="<?= $_SERVER['SCRIPT_NAME'] ?>#hashes">
-						<label for="hash_value">Input String:</label> <label for="hash_raw"><input type="checkbox" name="hash_raw" id="hash_raw" <?= ($_REQUEST['hash_raw'] ?? false) ? 'checked="checked"' : '' ?>> Hash Raw Bytes</label>
-						<textarea id="hash_value" name="hash_value" class="form-control" data-bs-theme="light"><?= $_REQUEST['hash_value'] ?? '' ?></textarea>
+						<form action="#hashes">
+						<label for="hash_value">Input String:</label> <label for="hash_raw"><input type="checkbox" name="hash_raw" id="hash_raw"> Hash Raw Bytes</label>
+						<textarea id="hash_value" name="hash_value" class="form-control" data-bs-theme="light"></textarea>
 						<button type="button" class="btn btn-sm btn-success hash_form">Submit</button>
 						<button type="button" class="send btn btn-sm btn-secondary">Send to 'Raw'</button>
 						</form>
