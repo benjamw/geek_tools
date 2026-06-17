@@ -1,5 +1,5 @@
 // length conversion
-let Ruler = class {
+export class Ruler {
 	constructor() {
 		this.ofractions = document.getElementById('fractions');
 		this.oinch = document.getElementById('inch');
@@ -69,6 +69,11 @@ let Ruler = class {
 			this.omm.value = Math.round(inch * 25.4 * 10) / 10;
 			this.ocm.value = Math.round(inch * 2.54 * 100) / 100;
 		}
+	}
+
+	// round for display, trimming floating-point artifacts (e.g. 10.439400000000001 -> 10.4394)
+	round6(n) {
+		return Math.round(n * 1e6) / 1e6;
 	}
 
 	frac_to_dec(frac) {
@@ -166,8 +171,8 @@ let Ruler = class {
 				}
 				this.omsg.innerHTML = this.omm.value + ' mm &nbsp; = &nbsp; ' + this.ocm.value + ' cm &nbsp; = &nbsp; ' + this.oinch.value + ' inch' + (this.oinch.value == "1" ? "" : "es") + sFinch;
 				sTmpf = '<li>' + this.omm.value + ' mm &divide; 10 = ' + this.ocm.value + ' cm</li>';
-				sTmpf += '<li>' + this.omm.value + ' mm &divide; 25.4 = ' + (this.omm.value / 25.4) + ' in</li>';
-				sTmpf += '<li>' + this.oinch.value + ' in &times; 25.4 = ' + (this.oinch.value * 25.4) + ' mm</li>';
+				sTmpf += '<li>' + this.omm.value + ' mm &divide; 25.4 = ' + this.round6(this.omm.value / 25.4) + ' in</li>';
+				sTmpf += '<li>' + this.oinch.value + ' in &times; 25.4 = ' + this.round6(this.oinch.value * 25.4) + ' mm</li>';
 				sTmpf += '<li>' + this.ofinch.value + ' = ' + this.frac_to_dec(this.ofinch.value) + ' in</li>';
 				this.oformula.innerHTML = '<ul>' + sTmpf + '</ul>';
 				this.oformula.style.display = "block";
@@ -194,7 +199,7 @@ let Ruler = class {
 				}
 				this.omsg.innerHTML = this.ocm.value + ' cm &nbsp; = &nbsp; ' + this.omm.value + ' mm &nbsp; = &nbsp; ' + this.oinch.value + ' inch' + (this.oinch.value == "1" ? "" : "es") + sFinch;
 				sTmpf = '<li>' + this.ocm.value + ' cm &times; 10 mm = ' + this.omm.value + ' mm</li>';
-				sTmpf += '<li>' + this.ocm.value + ' cm &divide; 2.54 in = ' + (this.ocm.value / 2.54) + ' in</li>';
+				sTmpf += '<li>' + this.ocm.value + ' cm &divide; 2.54 in = ' + this.round6(this.ocm.value / 2.54) + ' in</li>';
 				this.oformula.innerHTML = '<ul>' + sTmpf + '</ul>';
 				this.oformula.style.display = "block";
 			}
@@ -219,7 +224,7 @@ let Ruler = class {
 				}
 				this.omsg.innerHTML = this.oinch.value + ' inch' + (this.oinch.value == "1" ? "" : "es") + sFinch + " &nbsp; = &nbsp; " + this.omm.value + ' mm &nbsp; = &nbsp; ' + this.ocm.value + ' cm';
 				sTmpf = '<li>' + this.oinch.value + ' in &times; 25.4 = ' + this.omm.value + ' mm</li>';
-				sTmpf += '<li>' + this.oinch.value + ' in &times; 2.54  = ' + (this.oinch.value * 2.54) + ' cm</li>';
+				sTmpf += '<li>' + this.oinch.value + ' in &times; 2.54  = ' + this.round6(this.oinch.value * 2.54) + ' cm</li>';
 				this.oformula.innerHTML = '<ul>' + sTmpf + '</ul>';
 				this.oformula.style.display = "block";
 			}
@@ -242,7 +247,7 @@ let Ruler = class {
 					sTmp = '';
 				}
 				sTmpf = '<li>' + this.ofinch.value + ' in' + sTmp + ' &times; 25.4  = ' + this.omm.value + ' mm</li>';
-				sTmpf += '<li>' + this.ofinch.value + ' in' + sTmp + ' &times; 2.54  = ' + (this.oinch.value * 2.54) + ' cm</li>';
+				sTmpf += '<li>' + this.ofinch.value + ' in' + sTmp + ' &times; 2.54  = ' + this.round6(this.oinch.value * 2.54) + ' cm</li>';
 				this.oformula.innerHTML = '<ul>' + sTmpf + '</ul>';
 				this.oformula.style.display = "block";
 			}
@@ -451,5 +456,3 @@ let Ruler = class {
 		this.cxt.stroke();
 	}
 }
-
-let r;

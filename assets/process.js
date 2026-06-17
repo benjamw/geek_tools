@@ -1004,6 +1004,3 @@ $("button.file").on("click", function (evt) {
 	$('#file').val(val)
 		.parent().submit();
 });
-
-$("#rand_ipv4").val(generateRandomIP(4));
-$("#rand_ipv6").val(generateRandomIP(6));

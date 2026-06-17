@@ -19,11 +19,11 @@ function rand(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min; // The min is inclusive and the max is exclusive
 }
 
-Array.prototype.rand = function () {
-	return this[Math.floor(Math.random() * this.length)]
+function randElement(arr) {
+	return arr[Math.floor(Math.random() * arr.length)];
 }
 
-function generateRandomIP(v) {
+export function generateRandomIP(v) {
 	let prefixes = ipv4_doc_addresses;
 	let elemSize = 255;
 	let hex = false;
@@ -36,7 +36,7 @@ function generateRandomIP(v) {
 	}
 
 	// pick the prefix to use
-	let prefix = Object.keys(prefixes).rand();
+	let prefix = randElement(Object.keys(prefixes));
 
 	// how many groups should be created?
 	let p = rand(1, prefixes[prefix]);

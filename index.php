@@ -74,9 +74,6 @@ EOHTML;
 	<!-- UTF8 Converter -->
 	<!-- original from http://www.endmemo.com/unicode/unicodeconverter.php : http://www.endmemo.com/unicode/script/convertuni.js -->
 	<script src="assets/utf8_conv.js"></script>
-
-	<script src="assets/rand_ip.js"></script>
-	<script src="assets/ruler.js"></script>
 </head>
 <body>
 
@@ -518,33 +515,23 @@ EOHTML;
 		<div class="col">
 			<h2>Length Conversion</h2>
 			<canvas id="ruler" width="1280" height="130">Your browser does not support the canvas element.</canvas>
-			<script>
-				document.getElementById("ruler").width = document.getElementById("ruler").parentElement.clientWidth - 30;
-				window.onresize = function () {
-					document.getElementById("ruler").width = document.getElementById("ruler").parentElement.clientWidth - 30;
-					if ( ! r) {
-						r = new Ruler();
-					}
-					r.draw();
-				};
-			</script>
 			<form>
 				<div id="divInput" class="row">
-					<span class="col"><label for="mm">MM:</label><input id="mm" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="100" title="millimeter" class="form-control"></span>
-					<span class="col"><label for="cm">CM:</label><input id="cm" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="10" title="centimeter" class="form-control"></span>
-					<span class="col"><label for="inch">Decimal Inch:</label><input id="inch" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="3.94" title="decimal inch" class="form-control"></span>
-					<span class="col"><label for="finch">Fractional Inch:</label><input id="finch" type="text" onchange="r.calc(this);" onkeyup="r.calc(this);" placeholder="3 15/16" title="fractional inch" class="form-control"></span>
+					<span class="col"><label for="mm">MM:</label><input id="mm" type="text" placeholder="100" title="millimeter" class="form-control"></span>
+					<span class="col"><label for="cm">CM:</label><input id="cm" type="text" placeholder="10" title="centimeter" class="form-control"></span>
+					<span class="col"><label for="inch">Decimal Inch:</label><input id="inch" type="text" placeholder="3.94" title="decimal inch" class="form-control"></span>
+					<span class="col"><label for="finch">Fractional Inch:</label><input id="finch" type="text" placeholder="3 15/16" title="fractional inch" class="form-control"></span>
 				</div>
 				<div class="row">
 					<div class="col-3">
 						<label for="fractions">Smallest Graduations:</label>
-						<select id="fractions" onchange="r.draw();" class="form-control">
+						<select id="fractions" class="form-control">
 							<option value="8">1/8"</option>
 							<option value="16" selected="selected">1/16"</option>
 							<option value="32">1/32"</option>
 							<option value="64">1/64"</option>
 						</select>
-						<input type="checkbox" id="mark18" value="1" onchange="r.draw();" style="margin-left:1em;">
+						<input type="checkbox" id="mark18" value="1" style="margin-left:1em;">
 						<label for="mark18">label 1/8" markings</label>
 					</div>
 				</div>
@@ -563,15 +550,8 @@ EOHTML;
 	<div style="height:100px;">&nbsp;</div>
 </div>
 
-<script>
-	// instantiate the ruler
-	if ( ! r) {
-		r = new Ruler();
-	}
-	r.draw();
-</script>
-
 <script src="assets/process.js"></script>
+<script type="module" src="assets/main.js"></script>
 
 </body>
 </html>
