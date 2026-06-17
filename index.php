@@ -521,7 +521,7 @@ EOHTML;
 			<script>
 				document.getElementById("ruler").width = document.getElementById("ruler").parentElement.clientWidth - 30;
 				window.onresize = function () {
-					document.getElementById("ruler").width = document.getElementById("ruler").innerWidth - 30;
+					document.getElementById("ruler").width = document.getElementById("ruler").parentElement.clientWidth - 30;
 					if ( ! r) {
 						r = new Ruler();
 					}

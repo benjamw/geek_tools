@@ -128,7 +128,7 @@ function _fromChar(s) {
 		let cp = s.charCodeAt(i);
 		if (cp < 0 || cp > 65535) {
 			console.warn("_fromChar encountered an invalid High UTF-16 surrogate: " + cp);
-			b.push(NaN);
+			_CP.push(NaN);
 		}
 
 		if (0 !== high) {
@@ -138,7 +138,7 @@ function _fromChar(s) {
 				continue;
 			}
 			console.warn("_fromChar encountered an invalid Low UTF-16 surrogate: " + cp);
-			b.push(NaN);
+			_CP.push(NaN);
 			high = 0
 		}
 		55296 <= cp && cp <= 56319 ? high = cp : _CP.push(cp)

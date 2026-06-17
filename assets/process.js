@@ -14,7 +14,7 @@ if (!String.prototype.modPad) {
 		let pad = ret.length % num;
 		if (pad) {
 			if (pad < char.length) {
-				char = substr(char, -pad);
+				char = char.slice(-pad);
 			}
 
 			while (ret.length % num) {
@@ -102,22 +102,26 @@ function check_base64() {
 }
 
 function expandIPv6(ip) {
-	const parts = ip.split(':');
-	const fullParts = [];
-
-	for (const part of parts) {
-		if (part === '') {
-			const missingParts = 8 - parts.length + 1;
-			for (let i = 0; i < missingParts; i++) {
-				fullParts.push('0000');
-			}
-		}
-		else {
-			fullParts.push(part.padStart(4, '0'));
-		}
+	// split on the :: compression marker (at most one is allowed)
+	let head, tail;
+	if (ip.includes('::')) {
+		const halves = ip.split('::');
+		head = halves[0] === '' ? [] : halves[0].split(':');
+		tail = halves[1] === '' ? [] : halves[1].split(':');
+	}
+	else {
+		head = ip.split(':');
+		tail = [];
 	}
 
-	return fullParts.join(':');
+	const middle = [];
+	for (let i = 0, missing = 8 - (head.length + tail.length); i < missing; i++) {
+		middle.push('0000');
+	}
+
+	return head.concat(middle, tail)
+		.map(part => part.padStart(4, '0'))
+		.join(':');
 }
 
 function compressIPv6(ip) {
@@ -160,7 +164,7 @@ function isValidIPv6Dec(val) {
 	if (val.includes(":")) {
 		let groups = val.split(":");
 		for (let i = 0, len = groups.length; i < len; i += 1) {
-			if ((parseInt(group[i], 10) < 0) || (0xFFFF < parseInt(group[i], 10))) {
+			if ((parseInt(groups[i], 10) < 0) || (0xFFFF < parseInt(groups[i], 10))) {
 				return false;
 			}
 		}
@@ -170,7 +174,7 @@ function isValidIPv6Dec(val) {
 
 	val = BigInt(val.toString());
 
-	return ((0n <= val) && (val <= BigInt(340282366920938463463374607431768211456)));
+	return ((0n <= val) && (val <= 340282366920938463463374607431768211455n));
 }
 
 function ipv6ToDecimal(ip) {
@@ -646,10 +650,10 @@ $("#b64url").on("change click", function (evt) {
 	let str = $("#conv_base64").val();
 
 	if ($("#b64url").prop("checked")) {
-		str = str.replace("+", "-").replace("/", "_");
+		str = str.replace(/\+/g, "-").replace(/\//g, "_");
 	}
 	else {
-		str = str.replace("-", "+").replace("_", "/");
+		str = str.replace(/-/g, "+").replace(/_/g, "/");
 	}
 
 	$("#conv_base64").val(str);
@@ -669,7 +673,7 @@ $("#ipv4_wrap").find("input").bindWithDelay("change keyup share:update", functio
 	}
 
 	let type = $(this).attr("id").split("_")[1];
-	let val = $(this).val();
+	let val = $(this).val().trim();
 
 	if ("" === val) {
 		// fill the inputs with the empty string
@@ -780,7 +784,7 @@ $("#ipv6_wrap").find("input").bindWithDelay("change keyup share:update", functio
 	}
 
 	let type = $(this).attr("id").split("_")[1];
-	let val = $(this).val();
+	let val = $(this).val().trim();
 
 	if ("" === val) {
 		// fill the inputs with the empty string
@@ -850,7 +854,7 @@ $("#ipv6_wrap").find("input").bindWithDelay("change keyup share:update", functio
 }, bindDelay);
 
 $("#ipv6_text_toggle").on("click", function (evt) {
-	let val = $("#ipv6_text").val();
+	let val = $("#ipv6_text").val().trim();
 
 	// NOTE: these regular expressions are not meant to be complete or validation
 	// they are simply a quick way to determine which type of compression is being passed in
@@ -896,23 +900,27 @@ $("#ipv6_text_toggle").on("click", function (evt) {
 });
 
 $("#ipv6_dec_toggle").on("click", function (evt) {
-	let val = $("#ipv6_dec").val();
+	let val = $("#ipv6_dec").val().trim();
 
-	const parts_regex = /^(?:[0-9]{4}:){7}[0-9]{4}$/;
-	const full_regex = /a/;
+	if ("" === val) {
+		return;
+	}
 
 	let ret = "";
 
 	if (val.includes(":")) {
-		// grab the ipv6 from the text version
-		// largest possible value: 340282366920938463463374607431768211456 (2^128)
-		ret = ipv6ToDecimal($("#ipv6_text").val())
+		// grouped decimal -> single integer
+		// largest possible value: 340282366920938463463374607431768211455 (2^128 - 1)
+		ret = val.split(":").reduce(function (acc, seg) {
+			return (acc << 16n) + BigInt(parseInt(seg, 10) || 0);
+		}, 0n).toString();
 	}
 	else {
-		// grab the ipv6 from the text version
-		let ip = expandIPv6($("#ipv6_text").val());
-		let dec_seg = ip.split(':').map(segment => parseInt(segment, 16));
-		ret = dec_seg.join(':');
+		// single integer -> grouped decimal (each hextet as a decimal number)
+		ret = decimalToIPv6(val)
+			.split(':')
+			.map(segment => parseInt(segment, 16))
+			.join(':');
 	}
 
 	blocked = true;
