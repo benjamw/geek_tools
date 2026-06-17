@@ -3,7 +3,7 @@
 // sibling fields. Also hosts the base64 URL-safe detection / toggle. Ported
 // from the jQuery handlers that lived in process.js.
 
-import { bindWithDelay, triggerShareUpdate, isBlocked, block } from './util.js';
+import { bindWithDelay, triggerShareUpdate, isBlocked, block, caesar } from './util.js';
 
 const bindDelay = 500; // ms
 
@@ -126,6 +126,20 @@ function b64urlHandler(evt) {
 	node.value = str;
 }
 
+// Rot-N (Caesar) field: shift conv_raw into conv_rot13. The block suppresses
+// the change event for 500ms so cascading handlers don't re-run.
+function caesarHandler(evt) {
+	evt.stopPropagation();
+	block(500);
+
+	const raw = el("conv_raw");
+	const out = el("conv_rot13");
+	if (!raw || !out) {
+		return;
+	}
+	out.value = caesar(raw.value, this.value);
+}
+
 export function initConverters() {
 	const section = el("converters");
 	if (section) {
@@ -138,5 +152,11 @@ export function initConverters() {
 	if (box) {
 		box.addEventListener("change", b64urlHandler);
 		box.addEventListener("click", b64urlHandler);
+	}
+
+	const caesarInput = el("caesar");
+	if (caesarInput) {
+		caesarInput.addEventListener("change", caesarHandler);
+		caesarInput.addEventListener("click", caesarHandler);
 	}
 }

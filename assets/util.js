@@ -89,3 +89,42 @@ export function modPad(str, num, char) {
 	}
 	return ret;
 }
+
+// Caesar / ROT shift the letters of `str` by `amount`, leaving everything
+// else untouched. Replaces the String.prototype.caesar extension.
+// https://gist.github.com/EvanHahn/2587465
+export function caesar(str, amount) {
+	str = String(str);
+	amount = parseInt(amount, 10);
+
+	if (0 === amount) {
+		return str;
+	}
+
+	if (amount < 0) {
+		return caesar(str, amount + 26);
+	}
+
+	let output = '';
+
+	for (let i = 0; i < str.length; i++) {
+		let c = str[i];
+
+		if (c.match(/[a-z]/i)) {
+			const code = str.charCodeAt(i);
+
+			// Uppercase letters
+			if ((code >= 65) && (code <= 90)) {
+				c = String.fromCharCode(((code - 65 + amount) % 26) + 65);
+			}
+			// Lowercase letters
+			else if ((code >= 97) && (code <= 122)) {
+				c = String.fromCharCode(((code - 97 + amount) % 26) + 97);
+			}
+		}
+
+		output += c;
+	}
+
+	return output;
+}

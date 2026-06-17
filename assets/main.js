@@ -5,6 +5,7 @@ import { initDigits } from './digits.js';
 import { initConverters } from './converters.js';
 import { initUtf8 } from './utf8.js';
 import { initIp } from './ip.js';
+import { initHashes } from './hashes.js';
 
 function sizeRuler() {
 	const canvas = document.getElementById('ruler');
@@ -46,3 +47,4 @@ initDigits();
 initConverters();
 initUtf8();
 initIp();
+initHashes();

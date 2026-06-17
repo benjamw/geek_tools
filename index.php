@@ -62,14 +62,8 @@ EOHTML;
 
 	<link rel="stylesheet" href="assets/main.css">
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
 	<!-- BigInteger -->
 	<script src="assets/biginteger.js"></script>
-
-	<!-- bindWithDelay -->
-	<script src="assets/bind_with_delay.js"></script>
 </head>
 <body>
 
@@ -434,29 +428,6 @@ EOHTML;
 
 		</div>
 
-<!--
-		<div class="col">
-			<h2>Inverted Color</h2>
-
-			<section id="color" class="card">
-				<div class="card-body">
-					<div class="row">
-						<div class="form-group col">
-							<label for="color_dec">Decimal:</label>
-							<textarea id="color_dec" class="form-control color" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
-						</div>
-						<div class="form-group col">
-							<label for="color_hex">Hexadecimal:</label>
-							<textarea id="color_hex" class="form-control color" data-bs-theme="light"></textarea>
-							<?= $buttons ?>
-						</div>
-					</div>
-				</div>
-			</section>
-		</div>
--->
-
 	</div>
 
 	<div class="row" id="hashes">
@@ -546,7 +517,6 @@ EOHTML;
 	<div style="height:100px;">&nbsp;</div>
 </div>
 
-<script src="assets/process.js"></script>
 <script type="module" src="assets/main.js"></script>
 
 </body>
