@@ -1,9 +1,10 @@
-// Converters section: the #converters textareas POST to ajax.php (kept as a
-// temporary backend) and the returned encodings are written back into the
-// sibling fields. Also hosts the base64 URL-safe detection / toggle. Ported
-// from the jQuery handlers that lived in process.js.
+// Converters section: the #converters textareas decode the edited field back to
+// a raw string and re-encode it into every sibling field, entirely client-side
+// via encoders.js (a port of ajax.php's do_encodings). Also hosts the base64
+// URL-safe detection / toggle. Ported from the jQuery handlers in process.js.
 
 import { bindWithDelay, triggerShareUpdate, isBlocked, block, caesar } from './util.js';
+import { decodeToRaw, encodeAll } from './encoders.js';
 
 const bindDelay = 500; // ms
 
@@ -60,48 +61,38 @@ function convertersHandler(evt) {
 		checkBase64();
 	}
 
-	const body = new URLSearchParams({
-		encodings: "true",
-		val: val,
-		from: type
-	});
+	let data;
+	try {
+		data = encodeAll(decodeToRaw(type, val));
+	}
+	catch (err) {
+		console.error("Converters encoding failed:", err);
+		return;
+	}
 
-	fetch(window.location.href, {
-		method: "POST",
-		headers: { "Accept": "application/json" },
-		body: body
-	}).then(function (resp) {
-		if (!resp.ok) {
-			throw new Error("HTTP " + resp.status);
-		}
-		return resp.json();
-	}).then(function (data) {
-		const caesar = el("caesar");
-		if (caesar) {
-			caesar.value = 13;
-		}
+	const caesarField = el("caesar");
+	if (caesarField) {
+		caesarField.value = 13;
+	}
 
-		for (const enc in data) {
-			if (!Object.prototype.hasOwnProperty.call(data, enc)) {
-				continue;
+	for (const enc in data) {
+		if (!Object.prototype.hasOwnProperty.call(data, enc)) {
+			continue;
+		}
+		const out = (false === data[enc]) ? "" : data[enc];
+		setVal("conv_" + enc, out);
+
+		// pass the bytes along to the other areas
+		if (("share:update" !== evt.type) && ("bytes" === enc)) {
+			const padBox = el("int_padded");
+			if (padBox) {
+				padBox.checked = true;
+				triggerShareUpdate(padBox);
 			}
-			const out = (false === data[enc]) ? "" : data[enc];
-			setVal("conv_" + enc, out);
-
-			// pass the bytes along to the other areas
-			if (("share:update" !== evt.type) && ("bytes" === enc)) {
-				const padBox = el("int_padded");
-				if (padBox) {
-					padBox.checked = true;
-					triggerShareUpdate(padBox);
-				}
-				shareVal("conv_utf8bytes", out);
-				shareVal("conv_hex", out);
-			}
+			shareVal("conv_utf8bytes", out);
+			shareVal("conv_hex", out);
 		}
-	}).catch(function (err) {
-		console.error("Converters request failed:", err);
-	});
+	}
 }
 
 // Swap base64 <-> base64url alphabet in place. Suppresses the resulting

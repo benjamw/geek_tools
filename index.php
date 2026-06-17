@@ -450,28 +450,7 @@ EOHTML;
 								<th>Hash</th>
 							</tr>
 						</thead>
-						<?php foreach ($algos as $algo) { ?>
-							<?php
-								$algoname = slug($algo);
-								$bad = ['md4', 'md5', 'sha1', 'ripemd128', 'haval128,3', 'haval128,4'];
-								$ok = ['sha256', 'sha512', 'gost'];
-								$good = ['sha3-512'];
-								$class = '';
-								if (in_array($algo, $bad)) {
-									$class = ' class="table-danger"';
-								}
-								elseif (in_array($algo, $ok)) {
-									$class = ' class="table-warning"';
-								}
-								elseif (in_array($algo, $good)) {
-									$class = ' class="table-success"';
-								}
-							?>
-						<tr<?= $class ?>>
-							<th><?= $algo ?></th>
-							<td id="hash_<?= $algoname ?>" class="hash_out"><?= $hashes[$algo] ?></td>
-						</tr>
-						<?php } ?>
+						<tbody id="hash_rows"></tbody>
 					</table>
 				</div>
 			</section>
